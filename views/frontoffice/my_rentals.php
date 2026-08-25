@@ -15,141 +15,116 @@ foreach ($locations as $loc) {
         $totalDepense += ($loc['montant_total'] + $loc['frais_supplementaires']);
     }
 }
-$totalDocuments = $totalReservations * 3; // Contrat, facture, reçu
+$totalDocuments = $totalReservations * 3;
 ?>
 
-<div style="background-color: #F8FAFC; min-height: calc(100vh - 70px);" class="pt-5 pb-5">
-<div class="container">
-    
-    <!-- En-tête -->
-    <div class="d-flex justify-content-between align-items-end mb-4">
+<!-- ══════════════════════════════════════════════════════
+     HERO — Mes Locations
+═══════════════════════════════════════════════════════ -->
+<section class="rentals-hero" aria-label="Espace client mes locations">
+    <!-- Halos décoratifs -->
+    <span class="hero-halo hero-halo--left"  aria-hidden="true"></span>
+    <span class="hero-halo hero-halo--right" aria-hidden="true"></span>
+
+    <div class="container hero-content rentals-hero__inner">
+        <!-- Partie gauche : badge + titre -->
         <div>
-            <span class="text-primary text-uppercase fw-bold" style="font-size: 0.85rem; letter-spacing: 1px;">ESPACE CLIENT</span>
-            <h1 class="fw-bold text-dark mt-1 mb-2" style="font-size: 2.5rem; letter-spacing: -0.5px; color: #0F172A !important;">Mes locations</h1>
-            <p class="text-muted mb-0" style="font-size: 1.05rem;">Historique de vos réservations et téléchargement de vos documents officiels (contrat, facture, reçu).</p>
+            <div class="hero-badge">
+                <i class="bi bi-person-check-fill" aria-hidden="true"></i>
+                Espace Client
+            </div>
+            <h1 class="hero-title" style="margin-bottom:16px;">
+                Mes <span class="hero-title-accent">locations</span>
+            </h1>
+            <p class="hero-subtitle">
+                Historique de vos réservations et téléchargement de vos documents officiels (contrat, facture, reçu).
+            </p>
         </div>
-        <div>
-            <a href="<?= BASE_URL ?>/index.php?action=catalogue" class="btn btn-primary fw-medium px-4 py-2" style="border-radius: 8px; background-color: #2563EB; border-color: #2563EB;">
-                <i class="bi bi-plus-lg me-1"></i> Louer un équipement
+
+        <!-- Bouton CTA -->
+        <div class="rentals-hero__cta">
+            <a href="<?= BASE_URL ?>/index.php?action=catalogue"
+               class="btn rentals-cta-btn">
+                <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                Louer un équipement
             </a>
         </div>
     </div>
+</section>
 
-    <!-- KPIs Cards -->
-    <div class="row g-4 mb-4">
+<!-- ══════════════════════════════════════════════════════
+     CARTES KPI — chevauchent le hero par en bas
+═══════════════════════════════════════════════════════ -->
+<div class="container rentals-kpi-wrapper">
+    <div class="rentals-kpi-grid">
+
         <!-- Réservations -->
-        <div class="col-md-3">
-            <div class="card border-0 rounded-4 shadow-sm h-100 p-3 d-flex flex-row align-items-center bg-white">
-                <div class="rounded-circle bg-primary bg-opacity-10 d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px;">
-                    <i class="bi bi-boxes text-primary fs-4"></i>
-                </div>
-                <div>
-                    <h4 class="fw-bold mb-0 text-dark"><?= $totalReservations ?></h4>
-                    <span class="text-muted small">Réservations</span>
-                </div>
+        <div class="kpi-card">
+            <div class="kpi-icon kpi-icon--blue">
+                <i class="bi bi-boxes" aria-hidden="true"></i>
+            </div>
+            <div class="kpi-body">
+                <span class="kpi-value"><?= $totalReservations ?></span>
+                <span class="kpi-label">Réservations</span>
             </div>
         </div>
-        <!-- En cours -->
-        <div class="col-md-3">
-            <div class="card border-0 rounded-4 shadow-sm h-100 p-3 d-flex flex-row align-items-center bg-white">
-                <div class="rounded-circle bg-primary bg-opacity-10 d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px;">
-                    <i class="bi bi-clock-history text-primary fs-4"></i>
-                </div>
-                <div>
-                    <h4 class="fw-bold mb-0 text-dark"><?= $totalEnCours ?></h4>
-                    <span class="text-muted small">En cours</span>
-                </div>
-            </div>
-        </div>
-        <!-- Total dépensé -->
-        <div class="col-md-3">
-            <div class="card border-0 rounded-4 shadow-sm h-100 p-3 d-flex flex-row align-items-center bg-white">
-                <div class="rounded-circle bg-primary bg-opacity-10 d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px;">
-                    <i class="bi bi-wallet2 text-primary fs-4"></i>
-                </div>
-                <div>
-                    <h4 class="fw-bold mb-0 text-dark"><?= number_format($totalDepense, 2) ?> DT</h4>
-                    <span class="text-muted small">Total dépensé</span>
-                </div>
-            </div>
-        </div>
-        <!-- Documents -->
-        <div class="col-md-3">
-            <div class="card border-0 rounded-4 shadow-sm h-100 p-3 d-flex flex-row align-items-center bg-white">
-                <div class="rounded-circle bg-primary bg-opacity-10 d-flex justify-content-center align-items-center me-3" style="width: 50px; height: 50px;">
-                    <i class="bi bi-file-earmark-text text-primary fs-4"></i>
-                </div>
-                <div>
-                    <h4 class="fw-bold mb-0 text-dark"><?= $totalDocuments ?></h4>
-                    <span class="text-muted small">Documents</span>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <style>
-        /* Styles pour la barre de recherche et les filtres */
-        #rental-filters {
-            border: 1px solid #E2E8F0 !important;
-            transition: all 0.3s ease;
-        }
-        #rental-search {
-            border: 1px solid #E2E8F0 !important;
-            transition: all 0.2s ease-in-out;
-            background-color: #FFFFFF;
-        }
-        #rental-search:focus {
-            border-color: #3B82F6 !important;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15) !important;
-            outline: none;
-        }
-        /* Animation tactile et dynamique des boutons de filtre */
-        .filter-btn {
-            transition: all 0.2s ease-in-out;
-            transform-origin: center;
-        }
-        .filter-btn:hover:not(.active) {
-            background-color: #F8FAFC !important;
-            color: #475569 !important;
-            transform: translateY(-1px);
-        }
-        .filter-btn:active {
-            transform: scale(0.92) !important;
-        }
-        @keyframes popEffect {
-            0% { transform: scale(0.95); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
-        }
-        .filter-btn.active {
-            animation: popEffect 0.3s ease-out forwards;
-        }
-        /* Animation fluide pour les cartes */
-        .equipement-item {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: top center;
-        }
-        .equipement-item.hide-item {
-            opacity: 0;
-            transform: scale(0.95);
-            margin-bottom: -100px !important;
-            pointer-events: none;
-            z-index: -1;
-            display: none !important;
-        }
-    </style>
+        <!-- En cours -->
+        <div class="kpi-card">
+            <div class="kpi-icon kpi-icon--cyan">
+                <i class="bi bi-clock-history" aria-hidden="true"></i>
+            </div>
+            <div class="kpi-body">
+                <span class="kpi-value"><?= $totalEnCours ?></span>
+                <span class="kpi-label">En cours</span>
+            </div>
+        </div>
+
+        <!-- Total dépensé -->
+        <div class="kpi-card">
+            <div class="kpi-icon kpi-icon--green">
+                <i class="bi bi-wallet2" aria-hidden="true"></i>
+            </div>
+            <div class="kpi-body">
+                <span class="kpi-value"><?= number_format($totalDepense, 2) ?> <small>DT</small></span>
+                <span class="kpi-label">Total dépensé</span>
+            </div>
+        </div>
+
+        <!-- Documents -->
+        <div class="kpi-card">
+            <div class="kpi-icon kpi-icon--purple">
+                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+            </div>
+            <div class="kpi-body">
+                <span class="kpi-value"><?= $totalDocuments ?></span>
+                <span class="kpi-label">Documents</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- ══════════════════════════════════════════════════════
+     FILTRES + LISTE DES LOCATIONS
+═══════════════════════════════════════════════════════ -->
+<div class="container rentals-content-section pb-5">
 
     <!-- Barre de filtres et recherche -->
-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div class="rentals-filter-bar">
         <div class="bg-white rounded-pill shadow-sm p-1 d-inline-flex" id="rental-filters">
-            <button class="filter-btn btn btn-primary rounded-pill px-4 py-2 fw-medium border-0 active" data-filter="all" style="background-color: #0EA5E9; box-shadow: 0 2px 4px rgba(14,165,233,0.3);">Toutes</button>
+            <button class="filter-btn btn btn-primary rounded-pill px-4 py-2 fw-medium border-0 active"
+                    data-filter="all"
+                    style="background-color: #0091ff; box-shadow: 0 2px 8px rgba(0,145,255,0.3);">
+                Toutes
+            </button>
             <button class="filter-btn btn btn-light rounded-pill px-4 py-2 fw-medium text-muted bg-transparent border-0" data-filter="En attente">En attente</button>
             <button class="filter-btn btn btn-light rounded-pill px-4 py-2 fw-medium text-muted bg-transparent border-0" data-filter="Confirmée">Confirmées</button>
             <button class="filter-btn btn btn-light rounded-pill px-4 py-2 fw-medium text-muted bg-transparent border-0" data-filter="Terminée">Terminées</button>
         </div>
-        <div class="position-relative flex-grow-1 flex-md-grow-0" style="min-width: 300px; max-width: 400px;">
-            <i class="bi bi-search position-absolute text-muted" style="left: 18px; top: 50%; transform: translateY(-50%);"></i>
-            <input type="text" id="rental-search" class="form-control rounded-pill shadow-sm ps-5 py-2 text-dark" placeholder="Rechercher un équipement..." style="height: 45px; font-weight: 500;">
+        <div class="rentals-search-wrapper">
+            <i class="bi bi-search rentals-search-icon" aria-hidden="true"></i>
+            <input type="text" id="rental-search" class="rentals-search-input"
+                   placeholder="Rechercher un équipement…">
         </div>
     </div>
 
@@ -325,5 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
     searchInput.addEventListener('input', applyFilters);
 });
 </script>
+
+</div><!-- /rentals-content-section -->
 
 <?php require_once __DIR__ . '/../layout/footer.php'; ?>
