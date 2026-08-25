@@ -4,90 +4,128 @@ require_once __DIR__ . '/../layout/header.php';
 require_once __DIR__ . '/../layout/navbar.php';
 ?>
 
-<!-- Hero Banner Header -->
-<div class="bg-dark text-white py-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);">
-    <div class="container position-relative z-1">
-        <div class="row align-items-center">
-            <div class="col-lg-8">
-                <span class="badge bg-primary bg-opacity-25 text-info border border-info border-opacity-25 mb-3 px-3 py-2">
-                    <i class="bi bi-stars me-1"></i> Matériel Professionnel & Garanti
-                </span>
-                <h1 class="display-4 fw-bold mb-3">Louez le meilleur matériel en quelques clics</h1>
-                <p class="lead text-slate-300">Caméras, ordinateurs, projecteurs, drones et matériel de sonorisation prêts pour vos projets.</p>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- ══════════════════════════════════════════════════════
+     HERO SECTION — Navy profond + halo dégradé
+═══════════════════════════════════════════════════════ -->
+<section class="catalogue-hero" aria-label="Présentation du catalogue">
+    <!-- Halos de lumière flous décoratifs (aria-hidden) -->
+    <span class="hero-halo hero-halo--left"  aria-hidden="true"></span>
+    <span class="hero-halo hero-halo--right" aria-hidden="true"></span>
 
-<div class="container pb-5">
-    <!-- Barre de Recherche & Filtres Multicritères Dynamiques Instantanés -->
-    <div class="card border-0 shadow-sm rounded-4 mb-4 p-4 bg-white">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold mb-0"><i class="bi bi-funnel-fill text-primary me-2"></i> Recherche & Filtres Multicritères</h5>
+    <div class="container hero-content">
+        <!-- Badge professionnel -->
+        <div class="hero-badge">
+            <i class="bi bi-patch-check-fill" aria-hidden="true"></i>
+            Matériel Professionnel &amp; Garanti
         </div>
-        
-        <form id="filter-form" action="<?= BASE_URL ?>/index.php" method="GET" class="row g-3 align-items-end" onsubmit="return false;">
+
+        <!-- Titre principal -->
+        <h1 class="hero-title">
+            Louez le meilleur<br>
+            <span class="hero-title-accent">matériel</span> en quelques clics
+        </h1>
+
+        <!-- Sous-titre -->
+        <p class="hero-subtitle">
+            Caméras, ordinateurs, projecteurs, drones et matériel de sonorisation
+            prêts pour vos projets.
+        </p>
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     PANNEAU DE FILTRES — carte flottante chevauchant le hero
+═══════════════════════════════════════════════════════ -->
+<div class="container filter-panel-wrapper">
+    <div class="filter-panel" role="search" aria-label="Filtres du catalogue">
+        <div class="filter-panel-header">
+            <span class="filter-panel-title">
+                <i class="bi bi-sliders2" aria-hidden="true"></i>
+                Recherche &amp; Filtres
+            </span>
+        </div>
+
+        <form id="filter-form" action="<?= BASE_URL ?>/index.php" method="GET"
+              class="filter-grid" onsubmit="return false;">
             <input type="hidden" name="action" value="catalogue">
 
-            <!-- Recherche Mots-Clés -->
-            <div class="col-md-3">
-                <label for="q" class="form-label small text-muted font-weight-bold">Mots-clés / Nom</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                    <input type="text" class="form-control border-start-0 ps-0" id="q" name="q" placeholder="Sony, MacBook, Drone..." value="<?= htmlspecialchars($_GET['q'] ?? '') ?>" autocomplete="off">
+            <!-- Mots-clés -->
+            <div class="filter-field">
+                <label for="q" class="filter-label">Mots-clés / Nom</label>
+                <div class="filter-input-icon">
+                    <i class="bi bi-search filter-input-icon__icon" aria-hidden="true"></i>
+                    <input type="text" class="filter-input" id="q" name="q"
+                           placeholder="Sony, MacBook, Drone…"
+                           value="<?= htmlspecialchars($_GET['q'] ?? '') ?>"
+                           autocomplete="off">
                 </div>
             </div>
 
             <!-- Catégorie -->
-            <div class="col-md-3">
-                <label for="categorie" class="form-label small text-muted font-weight-bold">Catégorie</label>
-                <select class="form-select" id="categorie" name="categorie">
+            <div class="filter-field">
+                <label for="categorie" class="filter-label">Catégorie</label>
+                <select class="filter-select" id="categorie" name="categorie">
                     <option value="">Toutes les catégories</option>
                     <?php foreach ($categories as $cat): ?>
-                        <option value="<?= $cat['id_categorie'] ?>" <?= (($_GET['categorie'] ?? '') == $cat['id_categorie']) ? 'selected' : '' ?>>
+                        <option value="<?= $cat['id_categorie'] ?>"
+                            <?= (($_GET['categorie'] ?? '') == $cat['id_categorie']) ? 'selected' : '' ?>>
                             <?= htmlspecialchars($cat['nom_categorie']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
             </div>
 
-            <!-- État du matériel -->
-            <div class="col-md-2">
-                <label for="etat" class="form-label small text-muted font-weight-bold">État du matériel</label>
-                <select class="form-select" id="etat" name="etat">
+            <!-- État -->
+            <div class="filter-field">
+                <label for="etat" class="filter-label">État du matériel</label>
+                <select class="filter-select" id="etat" name="etat">
                     <option value="">Tous les états</option>
-                    <option value="Disponible" <?= (($_GET['etat'] ?? '') === 'Disponible') ? 'selected' : '' ?>>Disponible</option>
-                    <option value="En location" <?= (($_GET['etat'] ?? '') === 'En location') ? 'selected' : '' ?>>En location</option>
+                    <option value="Disponible"     <?= (($_GET['etat'] ?? '') === 'Disponible')     ? 'selected' : '' ?>>Disponible</option>
+                    <option value="En location"    <?= (($_GET['etat'] ?? '') === 'En location')    ? 'selected' : '' ?>>En location</option>
                     <option value="En maintenance" <?= (($_GET['etat'] ?? '') === 'En maintenance') ? 'selected' : '' ?>>En maintenance</option>
-                    <option value="Endommagé" <?= (($_GET['etat'] ?? '') === 'Endommagé') ? 'selected' : '' ?>>Endommagé</option>
+                    <option value="Endommagé"      <?= (($_GET['etat'] ?? '') === 'Endommagé')      ? 'selected' : '' ?>>Endommagé</option>
                 </select>
             </div>
 
             <!-- Prix Min -->
-            <div class="col-md-2">
-                <label for="prix_min" class="form-label small text-muted font-weight-bold">Prix Min (DT/j)</label>
-                <input type="number" step="0.01" class="form-control" id="prix_min" name="prix_min" placeholder="10" value="<?= htmlspecialchars($_GET['prix_min'] ?? '') ?>">
+            <div class="filter-field">
+                <label for="prix_min" class="filter-label">Prix Min (DT/j)</label>
+                <input type="number" step="0.01" class="filter-input filter-input--plain"
+                       id="prix_min" name="prix_min" placeholder="10"
+                       value="<?= htmlspecialchars($_GET['prix_min'] ?? '') ?>">
             </div>
 
             <!-- Prix Max -->
-            <div class="col-md-1">
-                <label for="prix_max" class="form-label small text-muted font-weight-bold">Prix Max</label>
-                <input type="number" step="0.01" class="form-control" id="prix_max" name="prix_max" placeholder="300" value="<?= htmlspecialchars($_GET['prix_max'] ?? '') ?>">
+            <div class="filter-field">
+                <label for="prix_max" class="filter-label">Prix Max (DT/j)</label>
+                <input type="number" step="0.01" class="filter-input filter-input--plain"
+                       id="prix_max" name="prix_max" placeholder="500"
+                       value="<?= htmlspecialchars($_GET['prix_max'] ?? '') ?>">
             </div>
 
-            <!-- Action Réinitialiser -->
-            <div class="col-md-1 d-flex">
-                <button type="button" id="reset-filters" class="btn btn-outline-secondary w-100" title="Réinitialiser tous les filtres">
-                    <i class="bi bi-arrow-counterclockwise"></i>
+            <!-- Réinitialiser -->
+            <div class="filter-field filter-field--reset">
+                <label class="filter-label">&nbsp;</label>
+                <button type="button" id="reset-filters" class="filter-reset-btn"
+                        title="Réinitialiser tous les filtres" aria-label="Réinitialiser les filtres">
+                    <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+                    Réinitialiser
                 </button>
             </div>
         </form>
     </div>
+</div>
 
-    <!-- Zone Dynamique des Résultats -->
+<!-- ══════════════════════════════════════════════════
+     ZONE DE RÉSULTATS
+═══════════════════════════════════════════════════ -->
+<div class="container catalogue-results-section pb-5">
     <div id="catalogue-results">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="fw-bold mb-0">Équipements trouvés (<span id="results-count"><?= count($equipements) ?></span>)</h4>
+        <div class="results-header">
+            <h2 class="results-title">
+                Équipements disponibles
+                <span class="results-count-badge" id="results-count"><?= count($equipements) ?></span>
+            </h2>
         </div>
 
         <div id="no-results-box" class="text-center py-5 bg-white rounded-4 shadow-sm border d-none">
@@ -175,9 +213,9 @@ require_once __DIR__ . '/../layout/navbar.php';
                     </div>
                 </div>
             <?php endforeach; ?>
-        </div>
+     </div>
     </div>
-</div>
+</div><!-- /catalogue-results-section -->
 
 <!-- Script de Filtrage Dynamique Instantané en Temps Réel (0ms delay) -->
 <script>

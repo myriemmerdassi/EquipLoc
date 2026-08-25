@@ -1,63 +1,260 @@
 /* ============================================================
-   EQUIPLOC - STYLES DESIGN SYSTÈME MODERN & ÉLÉGANT
-   CSS Premium - Gradient, Micro-animations, Glassmorphism
+   EQUIPLOC - DESIGN SYSTEM PREMIUM
+   Navy + Space Grotesk + DM Sans  |  Glassmorphism & Halos
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
-
+/* ── Tokens sémantiques ─────────────────────────────────── */
 :root {
-    --primary-color: #4f46e5;
-    --primary-hover: #4338ca;
-    --secondary-color: #06b6d4;
-    --accent-color: #f59e0b;
-    --dark-bg: #0f172a;
-    --card-bg: #ffffff;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --border-color: #e2e8f0;
+    /* Typographies */
+    --font-display: 'Space Grotesk', 'Outfit', sans-serif;
+    --font-body:    'DM Sans', 'Inter', sans-serif;
+
+    /* Couleurs principales */
+    --primary:       #0091ff;
+    --primary-hover: #007ce6;
+    --primary-soft:  rgba(0, 145, 255, 0.12);
+
+    /* Navy (hero / navbar) */
+    --navy:            #0f1d33;
+    --navy-mid:        #152541;
+    --navy-surface:    #1a2e50;
+    --navy-foreground: #f0f4ff;
+    --navy-muted:      #8fa0b5;
+
+    /* Slate (navbar fond) */
+    --slate-nav: #4b5463;
+
+    /* Fond général */
+    --background: #f5f7fa;
+    --surface:    #ffffff;
+
+    /* États */
+    --success:     #10b981;
+    --info:        #0ea5e9;
+    --warning:     #f59e0b;
+    --destructive: #e5484d;
+
+    /* Design tokens */
     --radius-lg: 16px;
     --radius-md: 10px;
-    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 10px 25px -5px rgba(79, 70, 229, 0.1);
-    --shadow-lg: 0 20px 30px -10px rgba(0, 0, 0, 0.12);
+    --radius-sm: 6px;
+
+    --shadow-card:     0 2px 12px rgba(0, 0, 0, 0.07);
+    --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.14);
+
+    /* Compatibilité anciens tokens */
+    --primary-color:   #0091ff;
+    --primary-hover:   #007ce6;
+    --secondary-color: #06b6d4;
+    --accent-color:    #f59e0b;
+    --dark-bg:         #0f1d33;
+    --card-bg:         #ffffff;
+    --text-main:       #1e293b;
+    --text-muted:      #64748b;
+    --border-color:    #e2e8f0;
+    --shadow-sm:       0 4px 6px -1px rgba(0,0,0,0.05);
+    --shadow-md:       0 10px 25px -5px rgba(0,145,255,0.10);
+    --shadow-lg:       0 20px 30px -10px rgba(0,0,0,0.12);
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f8fafc;
+    font-family: var(--font-body);
+    background-color: var(--background);
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-h1, h2, h3, h4, h5, h6, .navbar-brand {
-    font-family: 'Outfit', sans-serif;
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
     font-weight: 700;
 }
 
-/* --- NAVIGATION GLASSMORPHISM --- */
+.navbar-brand {
+    font-family: var(--font-display);
+    font-weight: 700;
+}
+
+/* --- NAVIGATION SLATE & BLUE MODERN HEADER --- */
 .navbar-custom {
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    background-color: #4b5463 !important; /* Slate gray background from screenshot */
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 64px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.navbar-brand span {
-    background: linear-gradient(135deg, #818cf8 0%, #38bdf8 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+/* Brand Logo */
+.logo-icon-circle {
+    width: 42px;
+    height: 42px;
+    background-color: #0091ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 145, 255, 0.3);
+    flex-shrink: 0;
 }
 
-.nav-link {
-    font-weight: 500;
-    color: #cbd5e1 !important;
-    transition: all 0.2s ease;
+.brand-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.2px;
 }
 
-.nav-link:hover, .nav-link.active {
+.brand-accent {
+    color: #2997ff;
+    font-weight: 700;
+}
+
+/* Nav Links & Active Underline Indicator */
+.nav-links-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    height: 100%;
+}
+
+.navbar-custom .nav-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 64px;
+}
+
+.navbar-custom .nav-link {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #b0b8c6 !important;
+    padding: 0 0.6rem !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 100%;
+    transition: color 0.2s ease;
+    text-decoration: none;
+}
+
+.navbar-custom .nav-link:hover {
     color: #ffffff !important;
-    transform: translateY(-1px);
+}
+
+.navbar-custom .nav-link.active {
+    color: #ffffff !important;
+}
+
+/* Underline indicator on active nav item */
+.navbar-custom .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: #0091ff;
+    border-radius: 3px 3px 0 0;
+}
+
+.nav-icon {
+    font-size: 1.15rem;
+    color: inherit;
+}
+
+/* User Profile Capsule Pill */
+.user-profile-pill {
+    background-color: #38404e;
+    border-radius: 50px;
+    padding: 4px 18px 4px 4px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.user-avatar-circle {
+    width: 36px;
+    height: 36px;
+    background-color: #0091ff;
+    border-radius: 50%;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.user-info-text {
+    line-height: 1.25;
+}
+
+.user-name {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.92rem;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+}
+
+.user-role {
+    color: #8fa0b5;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Logout Button */
+.btn-logout-outline {
+    border: 1.5px solid #d9434e !important;
+    color: #e5484d !important;
+    background: transparent !important;
+    border-radius: 50px !important;
+    padding: 6px 18px !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-logout-outline:hover {
+    background: rgba(229, 72, 77, 0.15) !important;
+    color: #ff6b6b !important;
+    border-color: #ff6b6b !important;
+}
+
+/* Guest Buttons */
+.btn-login-outline {
+    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+    background: transparent !important;
+    border-radius: 50px !important;
+    padding: 6px 18px !important;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.btn-login-outline:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: #ffffff !important;
+    color: #ffffff !important;
+}
+
+.btn-register-filled {
+    background-color: #0091ff !important;
+    color: #ffffff !important;
+    border-radius: 50px !important;
+    padding: 6px 18px !important;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: none !important;
+    text-decoration: none;
+}
+
+.btn-register-filled:hover {
+    background-color: #007ce6 !important;
+    color: #ffffff !important;
 }
 
 /* --- BADGES D'ÉTAT --- */
@@ -197,4 +394,295 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
         border: none !important;
         padding: 0 !important;
     }
+}
+
+/* ============================================================
+   CATALOGUE — HERO SECTION PREMIUM
+   ============================================================ */
+
+/* Conteneur hero : navy profond + dégradé subtil */
+.catalogue-hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(155deg, var(--navy) 0%, var(--navy-mid) 55%, #0d2244 100%);
+    padding: 80px 0 140px; /* grand padding bas pour que la carte de filtres chevauche */
+}
+
+/* Halos flous décoratifs */
+.hero-halo {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    opacity: 0.55;
+}
+.hero-halo--left {
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(0,145,255,0.35) 0%, transparent 70%);
+    top: -120px;
+    left: -140px;
+}
+.hero-halo--right {
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(14,165,233,0.28) 0%, transparent 70%);
+    bottom: -80px;
+    right: -80px;
+}
+
+/* Contenu hero */
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+}
+
+/* Badge "Matériel Professionnel & Garanti" */
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 145, 255, 0.15);
+    border: 1px solid rgba(0, 145, 255, 0.35);
+    color: #7dd3fc;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 28px;
+    backdrop-filter: blur(6px);
+}
+.hero-badge .bi {
+    font-size: 1rem;
+    color: #38bdf8;
+}
+
+/* Titre hero */
+.hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    color: var(--navy-foreground);
+    margin-bottom: 20px;
+}
+.hero-title-accent {
+    background: linear-gradient(90deg, #60a5fa 0%, #38bdf8 50%, #0091ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Sous-titre hero */
+.hero-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--navy-muted);
+    line-height: 1.7;
+    max-width: 560px;
+}
+
+/* ============================================================
+   CATALOGUE — PANNEAU DE FILTRES FLOTTANT
+   ============================================================ */
+
+/* Wrapper : chevauchement négatif sur le hero */
+.filter-panel-wrapper {
+    position: relative;
+    z-index: 10;
+    margin-top: -88px; /* remonte sur le hero */
+    margin-bottom: 48px;
+}
+
+/* Carte principale */
+.filter-panel {
+    background: var(--surface);
+    border-radius: 20px;
+    box-shadow: var(--shadow-elevated);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* En-tête du panneau */
+.filter-panel-header {
+    padding: 18px 28px 0;
+}
+.filter-panel-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+.filter-panel-title .bi {
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+/* Grille des champs de filtres */
+.filter-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.6fr 1.4fr 1fr 1fr auto;
+    gap: 16px;
+    padding: 18px 28px 24px;
+    align-items: end;
+}
+@media (max-width: 1100px) {
+    .filter-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+@media (max-width: 640px) {
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+    .filter-panel-wrapper {
+        margin-top: -40px;
+    }
+}
+
+/* Champ individuel */
+.filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Label */
+.filter-label {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Input avec icône intégrée */
+.filter-input-icon {
+    position: relative;
+}
+.filter-input-icon__icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+.filter-input-icon .filter-input {
+    padding-left: 40px;
+}
+
+/* Input générique */
+.filter-input,
+.filter-select {
+    width: 100%;
+    height: 44px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    background: #f9fbff;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-main);
+    padding: 0 14px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.filter-input--plain {
+    padding-left: 14px;
+}
+.filter-input:focus,
+.filter-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-soft);
+    background: #ffffff;
+}
+.filter-input::placeholder {
+    color: #b0bec9;
+    font-weight: 400;
+}
+
+/* Select : chevron personnalisé */
+.filter-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px;
+}
+
+/* Bouton réinitialiser */
+.filter-reset-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 44px;
+    padding: 0 18px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+.filter-reset-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-soft);
+}
+.filter-reset-btn .bi {
+    font-size: 1rem;
+}
+
+/* ============================================================
+   CATALOGUE — SECTION RÉSULTATS
+   ============================================================ */
+.catalogue-results-section {
+    padding-top: 8px;
+}
+
+.results-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+.results-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+.results-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 10px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    font-family: var(--font-body);
 }
