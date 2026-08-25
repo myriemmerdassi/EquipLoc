@@ -91,17 +91,27 @@ $action = sanitize($_GET['action'] ?? 'catalogue');
 
             <!-- Zone utilisateur à droite -->
             <div class="d-flex align-items-center gap-3">
-                <?php if (isLoggedIn()): ?>
+                <?php if (isLoggedIn()): 
+                    $prenomInit = mb_substr($user['prenom'] ?? '', 0, 1);
+                    $nomInit = mb_substr($user['nom'] ?? '', 0, 1);
+                    $initials = strtoupper($prenomInit . $nomInit) ?: 'U';
+                    $roleLabel = match($user['role'] ?? '') {
+                        'agent' => 'Agent location',
+                        'responsable' => 'Responsable admin',
+                        'client' => 'Client',
+                        default => ucfirst($user['role'] ?? 'Utilisateur')
+                    };
+                ?>
                     <div class="user-profile-pill d-flex align-items-center">
-                        <div class="user-avatar-circle d-flex align-items-center justify-content-center">
-                            <i class="bi bi-person fs-5"></i>
+                        <div class="user-avatar-circle d-flex align-items-center justify-content-center fw-bold">
+                            <span><?= htmlspecialchars($initials) ?></span>
                         </div>
                         <div class="user-info-text d-flex flex-column ms-2">
-                            <span class="user-name"><?= htmlspecialchars($user['prenom'] . ' ' . $user['nom']) ?></span>
-                            <span class="user-role"><?= htmlspecialchars(str_replace('_', ' ', strtoupper($user['role']))) ?></span>
+                            <span class="user-name"><?= htmlspecialchars(($user['prenom'] ?? '') . ' ' . ($user['nom'] ?? '')) ?></span>
+                            <span class="user-role"><?= htmlspecialchars($roleLabel) ?></span>
                         </div>
                     </div>
-                    <a href="<?= BASE_URL ?>/index.php?action=logout" class="btn btn-logout-outline d-flex align-items-center gap-2">
+                    <a href="<?= BASE_URL ?>/index.php?action=logout" class="btn btn-logout-outline d-flex align-items-center gap-2" title="Se déconnecter">
                         <i class="bi bi-box-arrow-right"></i>
                         <span>Déconnexion</span>
                     </a>

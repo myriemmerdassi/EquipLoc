@@ -6,15 +6,21 @@
 /* ── Tokens sémantiques ─────────────────────────────────── */
 :root {
     /* Typographies */
-    --font-display: 'Space Grotesk', 'Outfit', sans-serif;
-    --font-body:    'DM Sans', 'Inter', sans-serif;
+    --font-display: 'Sora', 'Space Grotesk', sans-serif;
+    --font-sans:    'Manrope', 'DM Sans', sans-serif;
+    --font-body:    var(--font-sans);
 
     /* Couleurs principales */
     --primary:       #0091ff;
     --primary-hover: #007ce6;
     --primary-soft:  rgba(0, 145, 255, 0.12);
 
-    /* Navy (hero / navbar) */
+    /* Navigation */
+    --nav:            #131d2e;
+    --nav-foreground: #f0f4ff;
+    --nav-muted:      #8fa0b5;
+
+    /* Navy (hero / dark sections) */
     --navy:            #0f1d33;
     --navy-mid:        #152541;
     --navy-surface:    #1a2e50;
@@ -25,22 +31,28 @@
     --slate-nav: #4b5463;
 
     /* Fond général */
-    --background: #f5f7fa;
+    --background: #f8fafc;
     --surface:    #ffffff;
 
-    /* États */
-    --success:     #10b981;
-    --info:        #0ea5e9;
-    --warning:     #f59e0b;
-    --destructive: #e5484d;
+    /* États sémantiques */
+    --success:            #10b981;
+    --success-foreground: #ffffff;
+    --warning:            #f59e0b;
+    --warning-foreground: #ffffff;
+    --info:               #0ea5e9;
+    --info-foreground:    #ffffff;
+    --destructive:        #e5484d;
+
+    /* Ombres personnalisées */
+    --shadow-card:     0 4px 20px rgba(15, 23, 42, 0.06);
+    --shadow-nav:      0 4px 20px rgba(0, 0, 0, 0.20);
+    --shadow-lift:     0 16px 36px -4px rgba(15, 23, 42, 0.14);
+    --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.12);
 
     /* Design tokens */
     --radius-lg: 16px;
     --radius-md: 10px;
     --radius-sm: 6px;
-
-    --shadow-card:     0 2px 12px rgba(0, 0, 0, 0.07);
-    --shadow-elevated: 0 12px 40px rgba(0, 0, 0, 0.14);
 
     /* Compatibilité anciens tokens */
     --primary-color:   #0091ff;
@@ -58,8 +70,12 @@
 }
 
 body {
-    font-family: var(--font-body);
+    font-family: var(--font-sans);
     background-color: var(--background);
+    background-image: 
+        radial-gradient(circle at 10% 15%, rgba(0, 145, 255, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 85%, rgba(14, 165, 233, 0.04) 0%, transparent 45%);
+    background-attachment: fixed;
     color: var(--text-main);
     min-height: 100vh;
     display: flex;
@@ -985,3 +1001,232 @@ button:focus-visible {
     pointer-events: none;
     display: none !important;
 }
+
+/* ============================================================
+   ANIMATIONS & UTILITIES
+   ============================================================ */
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-rise {
+    animation: rise 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Status Pill */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    font-family: var(--font-sans);
+    white-space: nowrap;
+}
+
+.status-pill .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-pill--en-attente {
+    background: rgba(245, 158, 11, 0.12);
+    color: #b45309;
+    border: 1px solid rgba(245, 158, 11, 0.28);
+}
+.status-pill--en-attente .dot {
+    background: #f59e0b;
+    box-shadow: 0 0 6px #f59e0b;
+}
+
+.status-pill--validee,
+.status-pill--en-cours {
+    background: rgba(14, 165, 233, 0.12);
+    color: #0284c7;
+    border: 1px solid rgba(14, 165, 233, 0.28);
+}
+.status-pill--validee .dot,
+.status-pill--en-cours .dot {
+    background: #0ea5e9;
+    box-shadow: 0 0 6px #0ea5e9;
+}
+
+.status-pill--terminee {
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.28);
+}
+.status-pill--terminee .dot {
+    background: #10b981;
+    box-shadow: 0 0 6px #10b981;
+}
+
+.status-pill--annulee {
+    background: rgba(229, 72, 77, 0.12);
+    color: #b91c1c;
+    border: 1px solid rgba(229, 72, 77, 0.28);
+}
+.status-pill--annulee .dot {
+    background: #e5484d;
+}
+
+/* ============================================================
+   SUIVI DES LOCATIONS (AGENT / BACKOFFICE)
+   ============================================================ */
+.bo-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 145, 255, 0.10);
+    color: var(--primary);
+    border: 1px solid rgba(0, 145, 255, 0.25);
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+/* KPI Cards Backoffice */
+.bo-kpi-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.bo-kpi-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+}
+
+.bo-kpi-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.bo-kpi-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+}
+.bo-kpi-val {
+    font-family: var(--font-display);
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+.bo-kpi-label {
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+.bo-kpi-hint {
+    font-size: 0.76rem;
+    color: #94a3b8;
+    margin-top: 6px;
+}
+
+/* Client Avatar Cell */
+.client-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0091ff 0%, #0070cc 100%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 145, 255, 0.25);
+}
+
+/* Backoffice Rentals Table */
+.table-rental-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.rentals-table {
+    margin-bottom: 0;
+}
+.rentals-table thead th {
+    background-color: #f1f5f9;
+    color: #475569;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 14px 18px;
+    border: none;
+}
+.rentals-table tbody tr {
+    transition: all 0.18s ease;
+    border-left: 3.5px solid transparent;
+}
+.rentals-table tbody td {
+    padding: 16px 18px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+}
+.rentals-table tbody tr:hover {
+    background-color: #f8faff;
+}
+
+/* Highlight row on hover based on status */
+.rentals-table tbody tr[data-status="En attente"]:hover {
+    border-left-color: #f59e0b;
+}
+.rentals-table tbody tr[data-status="Validée"]:hover,
+.rentals-table tbody tr[data-status="En cours"]:hover {
+    border-left-color: #0ea5e9;
+}
+.rentals-table tbody tr[data-status="Terminée"]:hover {
+    border-left-color: #10b981;
+}
+.rentals-table tbody tr[data-status="Annulée"]:hover {
+    border-left-color: #e5484d;
+}
+
+/* PDF Buttons group */
+.pdf-btn-group .btn {
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
