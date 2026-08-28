@@ -56,7 +56,8 @@ class EquipementController {
     public function backofficeIndex(): void {
         requireRole(ROLE_RESPONSABLE, ROLE_AGENT);
 
-        $equipements = $this->equipementModel->getAll();
+        $equipements  = $this->equipementModel->getAll();
+        $categories   = $this->categorieModel->getAll();
         $alertesStock = $this->equipementModel->getLowStockAlerts();
 
         require_once __DIR__ . '/../views/backoffice/equipements/index.php';
