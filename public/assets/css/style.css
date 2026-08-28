@@ -1603,4 +1603,400 @@ button:focus-visible {
     color: var(--text-muted);
 }
 
+/* ============================================================
+   CATÉGORIES — AMBIANCE MODERNE SLATE-NAVY LUMINEUSE
+   ============================================================ */
+
+/* Page container */
+.cat-page-wrapper {
+    background: 
+        radial-gradient(circle at 85% 15%, rgba(0, 145, 255, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 15% 85%, rgba(14, 165, 233, 0.10) 0%, transparent 50%),
+        linear-gradient(170deg, #131f33 0%, #172740 40%, #1b2e4c 100%);
+    min-height: calc(100vh - 64px);
+    color: #ffffff;
+    padding-bottom: 60px;
+}
+
+/* Badge Back-office avec filet */
+.cat-dash-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #38bdf8;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+.cat-dash-badge::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 2.5px;
+    background: #38bdf8;
+    border-radius: 2px;
+}
+
+/* Titre principal */
+.cat-main-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+}
+.cat-accent-word {
+    color: #0091ff;
+}
+
+/* Sous-titre */
+.cat-subtitle {
+    color: #94a3b8;
+    font-size: 1.02rem;
+    line-height: 1.6;
+    max-width: 650px;
+}
+
+/* Carte 1 : KPI Strip 3 colonnes */
+.cat-kpi-box {
+    background: rgba(27, 43, 70, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(16px);
+    border-radius: 18px;
+    padding: 24px 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+@media (max-width: 768px) {
+    .cat-kpi-box {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 20px;
+    }
+}
+
+.cat-kpi-col {
+    padding: 0 16px;
+}
+.cat-kpi-col:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+@media (max-width: 768px) {
+    .cat-kpi-col:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 14px;
+    }
+}
+
+.cat-kpi-bignum {
+    font-family: 'Space Grotesk', var(--font-display), monospace;
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+.cat-kpi-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #8fa0b5;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+/* Carte 2 : Répartition du parc */
+.cat-repartition-box {
+    background: rgba(27, 43, 70, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(16px);
+    border-radius: 18px;
+    padding: 22px 28px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+.cat-rep-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #8fa0b5;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 12px;
+}
+.cat-rep-count {
+    color: #cbd5e1;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 0.85rem;
+}
+
+.cat-rep-ribbon {
+    display: flex;
+    height: 12px;
+    border-radius: 50px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.08);
+    margin-bottom: 16px;
+}
+.cat-rep-segment {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.cat-rep-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: center;
+}
+.cat-rep-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    font-weight: 500;
+}
+.cat-rep-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Barre de recherche et switch de vue */
+.cat-search-input-dark {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50px;
+    color: #ffffff;
+    padding: 12px 22px 12px 46px;
+    font-size: 0.92rem;
+    width: 100%;
+    outline: none;
+    transition: all 0.2s ease;
+}
+.cat-search-input-dark:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #0091ff;
+    box-shadow: 0 0 0 3px rgba(0, 145, 255, 0.25);
+    color: #ffffff;
+}
+.cat-search-input-dark::placeholder {
+    color: #8fa0b5;
+}
+
+.cat-view-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: #8fa0b5;
+    font-size: 1.15rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.cat-view-btn:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.25);
+}
+.cat-view-btn.active {
+    background: #0091ff;
+    color: #ffffff;
+    border-color: #0091ff;
+    box-shadow: 0 4px 14px rgba(0, 145, 255, 0.4);
+}
+
+/* Grille de cartes */
+.cat-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 22px;
+}
+
+.cat-luminous-card {
+    background: rgba(27, 43, 70, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(16px);
+    border-radius: 18px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.cat-luminous-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0, 145, 255, 0.45);
+    box-shadow: 0 16px 36px rgba(0, 145, 255, 0.18);
+    background: rgba(31, 50, 82, 0.85);
+}
+
+.cat-card-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.cat-tile-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    background: rgba(0, 145, 255, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(0, 145, 255, 0.25);
+}
+
+.cat-code-badge {
+    font-family: 'Space Grotesk', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #8fa0b5;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 4px 10px;
+    border-radius: 8px;
+}
+
+.cat-title-text {
+    font-family: var(--font-display);
+    font-size: 1.22rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+}
+.cat-desc-text {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 18px;
+    flex-grow: 1;
+}
+
+/* Jauge dans la carte */
+.cat-card-gauge {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+}
+.cat-card-gauge-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #e2e8f0;
+}
+.cat-card-gauge-track {
+    height: 6px;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+.cat-card-gauge-fill {
+    height: 100%;
+    border-radius: 50px;
+}
+
+/* Actions */
+.cat-card-bottom-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Carte créative "+ Créer une catégorie" */
+.cat-create-dashed-card {
+    border: 2px dashed rgba(0, 145, 255, 0.35);
+    background: rgba(0, 145, 255, 0.03);
+    border-radius: 18px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none !important;
+    min-height: 280px;
+    transition: all 0.22s ease;
+}
+.cat-create-dashed-card:hover {
+    background: rgba(0, 145, 255, 0.08);
+    border-color: #0091ff;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 145, 255, 0.2);
+}
+.cat-plus-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(0, 145, 255, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(0, 145, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 14px;
+    transition: transform 0.2s ease;
+}
+.cat-create-dashed-card:hover .cat-plus-circle {
+    transform: scale(1.12);
+    background: #0091ff;
+    color: #ffffff;
+}
+
+/* Vue Liste */
+.cat-table-box {
+    background: rgba(27, 43, 70, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(16px);
+    border-radius: 18px;
+    overflow: hidden;
+}
+.cat-table-box table th {
+    background: rgba(0, 0, 0, 0.25);
+    color: #94a3b8;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 16px 20px;
+    border: none;
+}
+.cat-table-box table td {
+    padding: 16px 20px;
+    color: #e2e8f0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    vertical-align: middle;
+}
+.cat-table-box table tr:hover td {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+
 
