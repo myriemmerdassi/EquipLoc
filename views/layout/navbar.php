@@ -89,8 +89,14 @@ $action = sanitize($_GET['action'] ?? 'catalogue');
                 <?php endif; ?>
             </ul>
 
-            <!-- Zone utilisateur à droite -->
-            <div class="d-flex align-items-center gap-3">
+            <!-- Zone utilisateur à droite & Bouton Thème -->
+            <div class="d-flex align-items-center gap-2">
+                <!-- Bouton Bascule Thème Clair / Sombre -->
+                <button type="button" class="btn-theme-toggle" id="themeToggleBtn" title="Basculer entre Mode Clair et Mode Sombre" aria-label="Changer de thème">
+                    <i class="bi bi-moon-stars-fill theme-icon-moon"></i>
+                    <i class="bi bi-sun-fill theme-icon-sun d-none"></i>
+                </button>
+
                 <?php if (isLoggedIn()): 
                     $prenomInit = mb_substr($user['prenom'] ?? '', 0, 1);
                     $nomInit = mb_substr($user['nom'] ?? '', 0, 1);
@@ -127,6 +133,40 @@ $action = sanitize($_GET['action'] ?? 'catalogue');
         </div>
     </div>
 </nav>
+
+<!-- Script interactif du Thème Clair / Sombre -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const themeBtn = document.getElementById('themeToggleBtn');
+    if (!themeBtn) return;
+
+    const iconMoon = themeBtn.querySelector('.theme-icon-moon');
+    const iconSun = themeBtn.querySelector('.theme-icon-sun');
+
+    function updateIcons(theme) {
+        if (theme === 'dark') {
+            iconMoon?.classList.add('d-none');
+            iconSun?.classList.remove('d-none');
+        } else {
+            iconMoon?.classList.remove('d-none');
+            iconSun?.classList.add('d-none');
+        }
+    }
+
+    // Initialisation
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    updateIcons(currentTheme);
+
+    themeBtn.addEventListener('click', () => {
+        const activeTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const newTheme = (activeTheme === 'dark') ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('equiploc_theme', newTheme);
+        updateIcons(newTheme);
+    });
+});
+</script>
 
 <div class="container mt-4">
     <?= displayFlash() ?>

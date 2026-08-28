@@ -1,241 +1,219 @@
 <?php
-$pageTitle = "Catalogue des Équipements";
+$pageTitle = "Catalogue des Équipements — EquipLoc";
 require_once __DIR__ . '/../layout/header.php';
 require_once __DIR__ . '/../layout/navbar.php';
 ?>
 
-<!-- ══════════════════════════════════════════════════════
-     HERO SECTION — Navy profond + halo dégradé
-═══════════════════════════════════════════════════════ -->
-<section class="catalogue-hero" aria-label="Présentation du catalogue">
-    <!-- Halos de lumière flous décoratifs (aria-hidden) -->
-    <span class="hero-halo hero-halo--left"  aria-hidden="true"></span>
-    <span class="hero-halo hero-halo--right" aria-hidden="true"></span>
-
-    <div class="container hero-content">
-        <!-- Badge professionnel -->
-        <div class="hero-badge">
-            <i class="bi bi-patch-check-fill" aria-hidden="true"></i>
-            Matériel Professionnel &amp; Garanti
+<div class="cat-page-wrapper py-5 animate-rise">
+    <div class="container-fluid px-lg-5 px-3">
+        <!-- 1. En-tête : Badge Catalogue, Titre et Sous-titre -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-4 mb-4">
+            <div>
+                <div class="cat-dash-badge">CATALOGUE OFFICIEL</div>
+                <h1 class="cat-main-title">
+                    Louez le meilleur <span class="cat-accent-word">matériel</span>
+                </h1>
+                <p class="cat-subtitle mb-0">
+                    Caméras, ordinateurs, projecteurs, drones et sonorisation de qualité professionnelle prêts pour vos projets.
+                </p>
+            </div>
+            
+            <div class="flex-shrink-0 pt-md-2 d-none d-md-block">
+                <span class="badge rounded-pill px-4 py-2 fw-semibold" style="background: rgba(0, 145, 255, 0.15); color: #38bdf8; border: 1px solid rgba(0, 145, 255, 0.25); font-size: 0.88rem;">
+                    <i class="bi bi-shield-check me-1"></i> Matériel Garanti &amp; Révisé
+                </span>
+            </div>
         </div>
 
-        <!-- Titre principal -->
-        <h1 class="hero-title">
-            Louez le meilleur<br>
-            <span class="hero-title-accent">matériel</span> en quelques clics
-        </h1>
+        <!-- 2. Panneau de Filtres & Recherche Luminous Slate -->
+        <div class="cat-repartition-box mb-4">
+            <div class="cat-rep-header mb-3">
+                <span class="d-flex align-items-center gap-2">
+                    <i class="bi bi-sliders text-primary fs-5"></i>
+                    <span>FILTRES &amp; RECHERCHE EN DIRECT</span>
+                </span>
+                <span class="cat-rep-count" id="results-count-header"><?= count($equipements) ?> équipement(s) disponible(s)</span>
+            </div>
 
-        <!-- Sous-titre -->
-        <p class="hero-subtitle">
-            Caméras, ordinateurs, projecteurs, drones et matériel de sonorisation
-            prêts pour vos projets.
-        </p>
-    </div>
-</section>
+            <form id="filter-form" action="<?= BASE_URL ?>/index.php" method="GET" onsubmit="return false;">
+                <input type="hidden" name="action" value="catalogue">
+                <div class="row g-3 align-items-end">
+                    <!-- Recherche textuelle -->
+                    <div class="col-12 col-lg-3 col-md-6">
+                        <label for="q" class="cat-kpi-tag mb-2 d-block">Mots-clés / Nom</label>
+                        <div class="position-relative">
+                            <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                            <input type="text" class="cat-search-input-dark" id="q" name="q"
+                                   placeholder="Sony, MacBook, Drone..."
+                                   value="<?= htmlspecialchars($_GET['q'] ?? '') ?>"
+                                   autocomplete="off">
+                        </div>
+                    </div>
 
-<!-- ══════════════════════════════════════════════════════
-     PANNEAU DE FILTRES — carte flottante chevauchant le hero
-═══════════════════════════════════════════════════════ -->
-<div class="container filter-panel-wrapper">
-    <div class="filter-panel" role="search" aria-label="Filtres du catalogue">
-        <div class="filter-panel-header">
-            <span class="filter-panel-title">
-                <i class="bi bi-sliders2" aria-hidden="true"></i>
-                Recherche &amp; Filtres
-            </span>
-        </div>
+                    <!-- Catégorie -->
+                    <div class="col-12 col-lg-3 col-md-6">
+                        <label for="categorie" class="cat-kpi-tag mb-2 d-block">Catégorie</label>
+                        <select class="cat-search-input-dark" id="categorie" name="categorie" style="padding-left: 18px; appearance: auto;">
+                            <option value="" style="background: #172740; color: #fff;">Toutes les catégories</option>
+                            <?php foreach ($categories as $cat): ?>
+                                <option value="<?= $cat['id_categorie'] ?>" style="background: #172740; color: #fff;"
+                                    <?= (($_GET['categorie'] ?? '') == $cat['id_categorie']) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($cat['nom_categorie']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-        <form id="filter-form" action="<?= BASE_URL ?>/index.php" method="GET"
-              class="filter-grid" onsubmit="return false;">
-            <input type="hidden" name="action" value="catalogue">
+                    <!-- État -->
+                    <div class="col-12 col-lg-2 col-md-4">
+                        <label for="etat" class="cat-kpi-tag mb-2 d-block">État</label>
+                        <select class="cat-search-input-dark" id="etat" name="etat" style="padding-left: 18px; appearance: auto;">
+                            <option value="" style="background: #172740; color: #fff;">Tous les états</option>
+                            <option value="Disponible" style="background: #172740; color: #fff;" <?= (($_GET['etat'] ?? '') === 'Disponible') ? 'selected' : '' ?>>Disponible</option>
+                            <option value="En location" style="background: #172740; color: #fff;" <?= (($_GET['etat'] ?? '') === 'En location') ? 'selected' : '' ?>>En location</option>
+                            <option value="En maintenance" style="background: #172740; color: #fff;" <?= (($_GET['etat'] ?? '') === 'En maintenance') ? 'selected' : '' ?>>En maintenance</option>
+                        </select>
+                    </div>
 
-            <!-- Mots-clés -->
-            <div class="filter-field">
-                <label for="q" class="filter-label">Mots-clés / Nom</label>
-                <div class="filter-input-icon">
-                    <i class="bi bi-search filter-input-icon__icon" aria-hidden="true"></i>
-                    <input type="text" class="filter-input" id="q" name="q"
-                           placeholder="Sony, MacBook, Drone…"
-                           value="<?= htmlspecialchars($_GET['q'] ?? '') ?>"
-                           autocomplete="off">
+                    <!-- Prix Min & Max -->
+                    <div class="col-6 col-lg-2 col-md-4">
+                        <label for="prix_min" class="cat-kpi-tag mb-2 d-block">Prix Min (DT)</label>
+                        <input type="number" step="0.01" class="cat-search-input-dark" style="padding-left: 18px;"
+                               id="prix_min" name="prix_min" placeholder="0"
+                               value="<?= htmlspecialchars($_GET['prix_min'] ?? '') ?>">
+                    </div>
+
+                    <div class="col-6 col-lg-2 col-md-4">
+                        <label for="prix_max" class="cat-kpi-tag mb-2 d-block">Prix Max (DT)</label>
+                        <input type="number" step="0.01" class="cat-search-input-dark" style="padding-left: 18px;"
+                               id="prix_max" name="prix_max" placeholder="1000"
+                               value="<?= htmlspecialchars($_GET['prix_max'] ?? '') ?>">
+                    </div>
                 </div>
-            </div>
+            </form>
+        </div>
 
-            <!-- Catégorie -->
-            <div class="filter-field">
-                <label for="categorie" class="filter-label">Catégorie</label>
-                <select class="filter-select" id="categorie" name="categorie">
-                    <option value="">Toutes les catégories</option>
-                    <?php foreach ($categories as $cat): ?>
-                        <option value="<?= $cat['id_categorie'] ?>"
-                            <?= (($_GET['categorie'] ?? '') == $cat['id_categorie']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($cat['nom_categorie']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <!-- État -->
-            <div class="filter-field">
-                <label for="etat" class="filter-label">État du matériel</label>
-                <select class="filter-select" id="etat" name="etat">
-                    <option value="">Tous les états</option>
-                    <option value="Disponible"     <?= (($_GET['etat'] ?? '') === 'Disponible')     ? 'selected' : '' ?>>Disponible</option>
-                    <option value="En location"    <?= (($_GET['etat'] ?? '') === 'En location')    ? 'selected' : '' ?>>En location</option>
-                    <option value="En maintenance" <?= (($_GET['etat'] ?? '') === 'En maintenance') ? 'selected' : '' ?>>En maintenance</option>
-                    <option value="Endommagé"      <?= (($_GET['etat'] ?? '') === 'Endommagé')      ? 'selected' : '' ?>>Endommagé</option>
-                </select>
-            </div>
-
-            <!-- Prix Min -->
-            <div class="filter-field">
-                <label for="prix_min" class="filter-label">Prix Min (DT/j)</label>
-                <input type="number" step="0.01" class="filter-input filter-input--plain"
-                       id="prix_min" name="prix_min" placeholder="10"
-                       value="<?= htmlspecialchars($_GET['prix_min'] ?? '') ?>">
-            </div>
-
-            <!-- Prix Max -->
-            <div class="filter-field">
-                <label for="prix_max" class="filter-label">Prix Max (DT/j)</label>
-                <input type="number" step="0.01" class="filter-input filter-input--plain"
-                       id="prix_max" name="prix_max" placeholder="500"
-                       value="<?= htmlspecialchars($_GET['prix_max'] ?? '') ?>">
-            </div>
-
-            <!-- Réinitialiser -->
-            <div class="filter-field filter-field--reset">
-                <label class="filter-label">&nbsp;</label>
-                <button type="button" id="reset-filters" class="filter-reset-btn"
-                        title="Réinitialiser tous les filtres" aria-label="Réinitialiser les filtres">
-                    <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
-                    Réinitialiser
+        <!-- 3. Grille des fiches du catalogue -->
+        <div id="catalogue-results">
+            <!-- État vide -->
+            <div id="no-results-box" class="text-center py-5 cat-luminous-card mb-4 d-none">
+                <i class="bi bi-search fs-1 d-block mb-3 text-muted"></i>
+                <h4 class="text-white fw-bold">Aucun équipement ne correspond à vos critères</h4>
+                <p class="text-muted small mb-3">Essayez d'élargir votre recherche ou de réinitialiser vos filtres.</p>
+                <button type="button" id="reset-btn-empty" class="btn btn-primary rounded-pill px-4 py-2 fw-semibold">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Réinitialiser les filtres
                 </button>
             </div>
-        </form>
-    </div>
-</div>
 
-<!-- ══════════════════════════════════════════════════
-     ZONE DE RÉSULTATS
-═══════════════════════════════════════════════════ -->
-<div class="container catalogue-results-section pb-5">
-    <div id="catalogue-results">
-        <div class="results-header">
-            <h2 class="results-title">
-                Équipements disponibles
-                <span class="results-count-badge" id="results-count"><?= count($equipements) ?></span>
-            </h2>
-        </div>
+            <!-- Grille -->
+            <div class="cat-cards-grid" id="cards-wrapper">
+                <?php foreach ($equipements as $eq): 
+                    $etatPill = match($eq['etat']) {
+                        'Disponible' => 'status-pill--terminee',
+                        'En location' => 'status-pill--validee',
+                        'En maintenance', 'Endommagé' => 'status-pill--en-attente',
+                        default => 'status-pill--annulee'
+                    };
+                    $eqCode = sprintf('%02d', $eq['id_equipement']);
+                ?>
+                    <div class="equipement-card-col"
+                         data-search="<?= htmlspecialchars(strtolower($eq['nom_equipement'] . ' ' . $eq['description'] . ' ' . $eq['nom_categorie'] . ' ' . $eqCode)) ?>"
+                         data-categorie="<?= $eq['id_categorie'] ?>"
+                         data-etat="<?= htmlspecialchars($eq['etat']) ?>"
+                         data-prix="<?= (float)$eq['prix_par_jour'] ?>">
+                        
+                        <div class="cat-luminous-card">
+                            <!-- Image avec badge catégorie et état -->
+                            <div class="position-relative mb-3 rounded-3 overflow-hidden" style="height: 190px; background: rgba(0,0,0,0.2);">
+                                <span class="position-absolute top-0 start-0 m-3 badge rounded-pill" style="background: rgba(19, 31, 51, 0.85); backdrop-filter: blur(8px); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.1); font-size: 0.72rem;">
+                                    <?= htmlspecialchars($eq['nom_categorie']) ?>
+                                </span>
+                                
+                                <span class="position-absolute top-0 end-0 m-3 status-pill <?= $etatPill ?>" style="backdrop-filter: blur(8px);">
+                                    <span class="dot"></span>
+                                    <span><?= htmlspecialchars($eq['etat']) ?></span>
+                                </span>
 
-        <div id="no-results-box" class="text-center py-5 bg-white rounded-4 shadow-sm border d-none">
-            <i class="bi bi-search display-1 text-muted"></i>
-            <h4 class="mt-3 text-secondary">Aucun équipement ne correspond à vos critères.</h4>
-            <p class="text-muted">Essayez de modifier vos filtres ou la plage de prix.</p>
-            <button type="button" id="reset-btn-empty" class="btn btn-outline-primary">Voir tout le catalogue</button>
-        </div>
+                                <img src="<?= BASE_URL ?>/uploads/<?= htmlspecialchars($eq['image']) ?>" 
+                                     onerror="this.src='https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&auto=format&fit=crop&q=60';"
+                                     alt="<?= htmlspecialchars($eq['nom_equipement']) ?>"
+                                     style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
 
-        <div class="row g-4" id="cards-wrapper">
-            <?php foreach ($equipements as $eq): ?>
-                <div class="col-md-6 col-lg-4 equipement-card-col"
-                     data-search="<?= htmlspecialchars(strtolower($eq['nom_equipement'] . ' ' . $eq['description'] . ' ' . $eq['nom_categorie'])) ?>"
-                     data-categorie="<?= $eq['id_categorie'] ?>"
-                     data-etat="<?= htmlspecialchars($eq['etat']) ?>"
-                     data-prix="<?= (float)$eq['prix_par_jour'] ?>">
-                    
-                    <div class="equipement-card h-100 d-flex flex-column">
-                        <div class="equipement-img-wrapper">
-                            <span class="position-absolute top-0 start-0 m-3 badge bg-dark bg-opacity-75 text-white backdrop-blur">
-                                <?= htmlspecialchars($eq['nom_categorie']) ?>
-                            </span>
+                            <!-- Titre & Description -->
+                            <div class="d-flex align-items-center justify-content-between gap-2 mb-1">
+                                <h4 class="cat-title-text mb-0 text-truncate" title="<?= htmlspecialchars($eq['nom_equipement']) ?>">
+                                    <?= htmlspecialchars($eq['nom_equipement']) ?>
+                                </h4>
+                                <span class="cat-code-badge">#<?= $eqCode ?></span>
+                            </div>
                             
-                            <?php
-                            $badgeClass = match($eq['etat']) {
-                                'Disponible' => 'badge-disponible',
-                                'En location' => 'badge-en-location',
-                                'En maintenance' => 'badge-en-maintenance',
-                                'Endommagé' => 'badge-endommage',
-                                default => 'badge-disponible'
-                            };
-                            ?>
-                            <span class="position-absolute top-0 end-0 m-3 badge-etat <?= $badgeClass ?>">
-                                <?= htmlspecialchars($eq['etat']) ?>
-                            </span>
-
-                            <img src="<?= BASE_URL ?>/uploads/<?= htmlspecialchars($eq['image']) ?>" 
-                                 onerror="this.src='https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&auto=format&fit=crop&q=60';"
-                                 alt="<?= htmlspecialchars($eq['nom_equipement']) ?>">
-                        </div>
-
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title fw-bold mb-2"><?= htmlspecialchars($eq['nom_equipement']) ?></h5>
-                            <p class="card-text text-muted small mb-3 flex-grow-1">
-                                <?= htmlspecialchars(mb_strimwidth($eq['description'] ?? '', 0, 100, "...")) ?>
+                            <p class="cat-desc-text">
+                                <?= htmlspecialchars(mb_strimwidth($eq['description'] ?? '', 0, 95, "...")) ?>
                             </p>
 
-                            <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+                            <!-- Tarif & Disponibilité -->
+                            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
                                 <div>
-                                    <span class="small text-muted d-block">Prix par jour</span>
-                                    <span class="prix-badge"><?= number_format($eq['prix_par_jour'], 2) ?> DT</span>
+                                    <span class="text-muted small d-block" style="font-size: 0.72rem;">Tarif journalier</span>
+                                    <div class="cat-title-text text-primary mb-0" style="font-size: 1.25rem;">
+                                        <?= number_format($eq['prix_par_jour'], 2, ',', ' ') ?> <small style="font-size: 0.75rem; color: #8fa0b5;">DT/j</small>
+                                    </div>
                                 </div>
-                                <div>
-                                    <span class="small text-muted d-block text-end">Stock</span>
-                                    <span class="fw-bold <?= $eq['stock'] > 0 ? 'text-success' : 'text-danger' ?>">
-                                        <?= $eq['stock'] ?> dispo(s)
+                                <div class="text-end">
+                                    <span class="text-muted small d-block" style="font-size: 0.72rem;">Disponibilité</span>
+                                    <span class="fw-bold <?= $eq['stock'] > 0 ? 'text-success' : 'text-danger' ?>" style="font-size: 0.88rem;">
+                                        <?= $eq['stock'] > 0 ? $eq['stock'] . ' dispo(s)' : 'Rupture' ?>
                                     </span>
                                 </div>
                             </div>
 
-                            <div class="mt-3">
+                            <!-- Actions -->
+                            <div class="mt-auto">
                                 <?php if (isLoggedIn() && hasRole(ROLE_CLIENT)): ?>
                                     <a href="<?= BASE_URL ?>/index.php?action=reserve&id_equipement=<?= $eq['id_equipement'] ?>" 
-                                       class="btn btn-primary w-100 rounded-3 fw-bold <?= ($eq['stock'] <= 0 || $eq['etat'] !== 'Disponible') ? 'disabled' : '' ?>">
+                                       class="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm <?= ($eq['stock'] <= 0 || $eq['etat'] !== 'Disponible') ? 'disabled' : '' ?>">
                                         <i class="bi bi-calendar-plus me-1"></i> Réserver maintenant
                                     </a>
-                                    <a href="<?= BASE_URL ?>/index.php?action=details&id=<?= $eq['id_equipement'] ?>" class="btn btn-outline-secondary w-100 rounded-3 mt-2 fw-bold">Voir les détails</a>
+                                    <a href="<?= BASE_URL ?>/index.php?action=details&id=<?= $eq['id_equipement'] ?>" class="btn btn-outline-secondary w-100 rounded-pill mt-2 py-2 fw-semibold" style="font-size: 0.85rem;">Voir les détails</a>
                                 <?php elseif (isLoggedIn() && hasRole(ROLE_RESPONSABLE)): ?>
-                                    <a href="<?= BASE_URL ?>/index.php?action=equipement_edit&id=<?= $eq['id_equipement'] ?>" class="btn btn-outline-warning w-100 rounded-3 fw-bold">
+                                    <a href="<?= BASE_URL ?>/index.php?action=equipement_edit&id=<?= $eq['id_equipement'] ?>" class="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm">
                                         <i class="bi bi-pencil-square me-1"></i> Gérer dans l'inventaire
                                     </a>
-                                    <a href="<?= BASE_URL ?>/index.php?action=details&id=<?= $eq['id_equipement'] ?>" class="btn btn-outline-secondary w-100 rounded-3 mt-2 fw-bold">Voir les détails</a>
+                                    <a href="<?= BASE_URL ?>/index.php?action=details&id=<?= $eq['id_equipement'] ?>" class="btn btn-outline-secondary w-100 rounded-pill mt-2 py-2 fw-semibold" style="font-size: 0.85rem;">Voir les détails</a>
                                 <?php elseif (isLoggedIn() && hasRole(ROLE_AGENT)): ?>
-                                    <a href="<?= BASE_URL ?>/index.php?action=location_comptoir&id_equipement=<?= $eq['id_equipement'] ?>" class="btn btn-success w-100 rounded-3 fw-bold <?= ($eq['stock'] <= 0 || $eq['etat'] !== 'Disponible') ? 'disabled' : '' ?>">
+                                    <a href="<?= BASE_URL ?>/index.php?action=location_comptoir&id_equipement=<?= $eq['id_equipement'] ?>" class="btn btn-success w-100 rounded-pill fw-bold py-2 shadow-sm <?= ($eq['stock'] <= 0 || $eq['etat'] !== 'Disponible') ? 'disabled' : '' ?>">
                                         <i class="bi bi-shop me-1"></i> Louer au comptoir
                                     </a>
-                                    <a href="<?= BASE_URL ?>/index.php?action=details&id=<?= $eq['id_equipement'] ?>" class="btn btn-outline-secondary w-100 rounded-3 mt-2 fw-bold">Voir les détails</a>
+                                    <a href="<?= BASE_URL ?>/index.php?action=details&id=<?= $eq['id_equipement'] ?>" class="btn btn-outline-secondary w-100 rounded-pill mt-2 py-2 fw-semibold" style="font-size: 0.85rem;">Voir les détails</a>
                                 <?php else: ?>
-                                    <a href="<?= BASE_URL ?>/index.php?action=login" class="btn btn-outline-primary w-100 rounded-3 fw-bold">
+                                    <a href="<?= BASE_URL ?>/index.php?action=login" class="btn btn-primary w-100 rounded-pill fw-bold py-2 shadow-sm">
                                         <i class="bi bi-box-arrow-in-right me-1"></i> Connectez-vous pour louer
                                     </a>
+                                    <a href="<?= BASE_URL ?>/index.php?action=details&id=<?= $eq['id_equipement'] ?>" class="btn btn-outline-secondary w-100 rounded-pill mt-2 py-2 fw-semibold" style="font-size: 0.85rem;">Voir les détails</a>
                                 <?php endif; ?>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-     </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
     </div>
-</div><!-- /catalogue-results-section -->
+</div>
 
-<!-- Script de Filtrage Dynamique Instantané en Temps Réel (0ms delay) -->
+<!-- Script de Filtrage Dynamique Instantané en Temps Réel -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('filter-form');
     const inputQ = document.getElementById('q');
     const selectCat = document.getElementById('categorie');
     const selectEtat = document.getElementById('etat');
     const inputPrixMin = document.getElementById('prix_min');
     const inputPrixMax = document.getElementById('prix_max');
-    const resetBtn = document.getElementById('reset-filters');
     const resetBtnEmpty = document.getElementById('reset-btn-empty');
 
     const cardCols = document.querySelectorAll('.equipement-card-col');
-    const resultsCount = document.getElementById('results-count');
+    const resultsCountHeader = document.getElementById('results-count-header');
     const noResultsBox = document.getElementById('no-results-box');
-
-    // Récupérer l'URL de base du formulaire de manière sécurisée
-    // (form.action renvoie l'input "action" à cause de son name="action")
-    const formBaseUrl = form.getAttribute('action');
 
     function applyInstantFilter() {
         const qVal = inputQ.value.toLowerCase().trim();
@@ -265,35 +243,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        if (resultsCount) resultsCount.textContent = count;
+        if (resultsCountHeader) {
+            resultsCountHeader.textContent = `${count} équipement(s) disponible(s)`;
+        }
+
         if (noResultsBox) {
             if (count === 0) noResultsBox.classList.remove('d-none');
             else noResultsBox.classList.add('d-none');
         }
-
-        // Mise à jour de l'URL pour conserver l'historique
-        const params = new URLSearchParams();
-        params.append('action', 'catalogue');
-        if (inputQ.value.trim()) params.append('q', inputQ.value.trim());
-        if (catVal) params.append('categorie', catVal);
-        if (etatVal) params.append('etat', etatVal);
-        if (inputPrixMin.value) params.append('prix_min', inputPrixMin.value);
-        if (inputPrixMax.value) params.append('prix_max', inputPrixMax.value);
-
-        const newUrl = formBaseUrl + '?' + params.toString();
-        window.history.replaceState({}, '', newUrl);
     }
 
-    // Événements INSTANTANÉS sur chaque touche tapée (0ms delay)
     inputQ.addEventListener('input', applyInstantFilter);
     inputPrixMin.addEventListener('input', applyInstantFilter);
     inputPrixMax.addEventListener('input', applyInstantFilter);
-
-    // Événements sur les menus déroulants
     selectCat.addEventListener('change', applyInstantFilter);
     selectEtat.addEventListener('change', applyInstantFilter);
 
-    // Bouton de réinitialisation
     function resetAll() {
         inputQ.value = '';
         selectCat.value = '';
@@ -303,10 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
         applyInstantFilter();
     }
 
-    if (resetBtn) resetBtn.addEventListener('click', resetAll);
     if (resetBtnEmpty) resetBtnEmpty.addEventListener('click', resetAll);
-
-    // Lancer une première fois pour appliquer les filtres présents dans l'URL
     applyInstantFilter();
 });
 </script>

@@ -20,5 +20,13 @@
     
     <!-- Custom CSS System -->
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
+
+    <!-- Script de persistance instantanée du Thème (Clair / Sombre) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('equiploc_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
 </head>
 <body>

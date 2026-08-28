@@ -99,7 +99,7 @@ $blueTones = [
 
                     <!-- Filtre par Catégories -->
                     <div class="mb-4">
-                        <div class="cat-kpi-tag mb-2 d-flex align-items-center gap-2 text-white">
+                        <div class="cat-kpi-tag mb-2 d-flex align-items-center gap-2 text-dark">
                             <i class="bi bi-tags text-primary"></i>
                             <span>Catégories</span>
                         </div>
@@ -121,7 +121,7 @@ $blueTones = [
 
                     <!-- Filtre par État -->
                     <div class="mb-4">
-                        <div class="cat-kpi-tag mb-2 d-flex align-items-center gap-2 text-white">
+                        <div class="cat-kpi-tag mb-2 d-flex align-items-center gap-2 text-dark">
                             <i class="bi bi-activity text-info"></i>
                             <span>État matériel</span>
                         </div>
@@ -138,7 +138,7 @@ $blueTones = [
                         <div class="d-flex align-items-center gap-2">
                             <i class="bi bi-shield-exclamation text-danger fs-5"></i>
                             <div>
-                                <div class="fw-bold text-white" style="font-size: 0.82rem;">Stock sous le seuil</div>
+                                <div class="fw-bold text-dark" style="font-size: 0.82rem;">Stock sous le seuil</div>
                                 <small class="text-muted" style="font-size: 0.72rem;">Alertes réappro</small>
                             </div>
                         </div>
@@ -148,7 +148,7 @@ $blueTones = [
                     </div>
 
                     <!-- Bouton de réinitialisation -->
-                    <button type="button" id="resetFiltersBtn" class="btn btn-sm btn-outline-light w-100 mt-4 rounded-pill py-2 d-none" style="font-size: 0.82rem; border-color: rgba(255,255,255,0.2);">
+                    <button type="button" id="resetFiltersBtn" class="btn btn-sm btn-outline-secondary w-100 mt-4 rounded-pill py-2 d-none" style="font-size: 0.82rem;">
                         <i class="bi bi-arrow-counterclockwise me-1"></i> Réinitialiser les filtres
                     </button>
                 </aside>
@@ -159,8 +159,8 @@ $blueTones = [
                 <!-- Barre d'outils droite : Compteur & Commutateur de vue -->
                 <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
                     <div class="d-flex align-items-center gap-2">
-                        <h5 class="fw-bold text-white mb-0" style="font-family: var(--font-display);">Équipements répertoriés</h5>
-                        <span class="badge rounded-pill px-3 py-1 fw-bold" style="background: rgba(0, 145, 255, 0.15); color: #38bdf8; border: 1px solid rgba(0, 145, 255, 0.25);" id="matchingCountBadge">
+                        <h5 class="fw-bold text-dark mb-0" style="font-family: var(--font-display);">Équipements répertoriés</h5>
+                        <span class="badge rounded-pill px-3 py-1 fw-bold" style="background: rgba(0, 145, 255, 0.12); color: #0077d4; border: 1px solid rgba(0, 145, 255, 0.25);" id="matchingCountBadge">
                             <?= $totalReferences ?> fiche(s)
                         </span>
                     </div>
@@ -241,7 +241,7 @@ $blueTones = [
                                 <p class="cat-desc-text"><?= htmlspecialchars($eq['description'] ?: 'Aucune description fournie pour cet équipement.') ?></p>
                                 
                                 <div class="mb-3">
-                                    <span class="badge rounded-pill px-3 py-1 fw-semibold" style="background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.08); font-size: 0.72rem;">
+                                    <span class="badge rounded-pill px-3 py-1 fw-semibold" style="background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; font-size: 0.72rem;">
                                         <i class="bi bi-tag-fill me-1 text-primary"></i><?= htmlspecialchars($eq['nom_categorie']) ?>
                                     </span>
                                 </div>
@@ -249,7 +249,7 @@ $blueTones = [
                                 <!-- Jauge de stock visuelle -->
                                 <div class="cat-card-gauge">
                                     <div class="cat-card-gauge-header">
-                                        <span class="fw-bold <?= $isLowStock ? 'text-danger' : 'text-white' ?>">
+                                        <span class="fw-bold <?= $isLowStock ? 'text-danger' : 'text-dark' ?>">
                                             <i class="bi <?= $isLowStock ? 'bi-exclamation-circle-fill text-danger' : 'bi-check-circle-fill text-success' ?> me-1"></i>
                                             <?= $eq['stock'] ?> unité(s)
                                         </span>
@@ -291,7 +291,7 @@ $blueTones = [
                             <div class="cat-plus-circle">
                                 <i class="bi bi-plus-lg"></i>
                             </div>
-                            <h5 class="fw-bold text-white mb-1" style="font-family: var(--font-display);">Nouveau Matériel</h5>
+                            <h5 class="fw-bold text-dark mb-1" style="font-family: var(--font-display);">Nouveau Matériel</h5>
                             <p class="text-muted small mb-0">Enregistrer un équipement dans le stock</p>
                         </a>
                     <?php endif; ?>

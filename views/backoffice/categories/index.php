@@ -171,7 +171,7 @@ function getCategoryIcon(string $name): string {
 
                         <!-- Actions -->
                         <div class="cat-card-bottom-actions">
-                            <a href="<?= BASE_URL ?>/index.php?action=equipements_admin" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.8rem; border-color: rgba(255,255,255,0.2);">
+                            <a href="<?= BASE_URL ?>/index.php?action=equipements_admin" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.8rem;">
                                 <i class="bi bi-box-arrow-up-right me-1"></i> Voir stock
                             </a>
                             
@@ -202,7 +202,7 @@ function getCategoryIcon(string $name): string {
                     <div class="cat-plus-circle">
                         <i class="bi bi-plus-lg"></i>
                     </div>
-                    <h5 class="fw-bold text-white mb-1" style="font-family: var(--font-display);">Nouvelle Catégorie</h5>
+                    <h5 class="fw-bold text-dark mb-1" style="font-family: var(--font-display);">Nouvelle Catégorie</h5>
                     <p class="text-muted small mb-0">Ajouter un nouveau domaine d'équipements</p>
                 </a>
             <?php endif; ?>

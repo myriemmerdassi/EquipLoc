@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Suivi des Locations & Comptoir";
+$pageTitle = "Suivi des Locations & Comptoir — EquipLoc";
 require_once __DIR__ . '/../../layout/header.php';
 require_once __DIR__ . '/../../layout/navbar.php';
 
@@ -11,357 +11,377 @@ $completedCount = count(array_filter($locations, fn($l) => $l['statut'] === 'Ter
 $totalRevenue = array_reduce($locations, fn($carry, $l) => $carry + (float)($l['montant_total'] ?? 0) + (float)($l['frais_supplementaires'] ?? 0), 0.0);
 ?>
 
-<div class="container py-5 animate-rise">
-    <!-- En-tête Back-office -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-        <div>
-            <div class="bo-header-badge">
-                <i class="bi bi-graph-up-arrow"></i>
-                <span>Back-office</span>
+<div class="cat-page-wrapper py-5 animate-rise">
+    <div class="container-fluid px-lg-5 px-3">
+        <!-- 1. En-tête : Badge Back-office, Titre avec "Locations" en bleu et Boutons d'action -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-4 mb-4">
+            <div>
+                <div class="cat-dash-badge">BACK-OFFICE</div>
+                <h1 class="cat-main-title">
+                    Suivi des <span class="cat-accent-word">Locations</span>
+                </h1>
+                <p class="cat-subtitle mb-0">
+                    Supervision dynamique des réservations, validation comptoir et gestion des retours sans tableaux rigides.
+                </p>
             </div>
-            <h1 class="h2 fw-bold text-dark mb-1" style="font-family: var(--font-display);">Suivi des locations</h1>
-            <p class="text-muted mb-0">Supervision en temps réel des réservations, validation comptoir et retours d'équipements.</p>
-        </div>
-        <div class="d-flex align-items-center gap-2 flex-wrap">
-            <button type="button" id="btnExportCsv" class="btn btn-outline-secondary d-flex align-items-center gap-2 fw-semibold px-3 py-2 rounded-3 shadow-sm">
-                <i class="bi bi-download"></i>
-                <span>Exporter</span>
-            </button>
-            <a href="<?= BASE_URL ?>/index.php?action=location_comptoir" class="btn btn-primary d-flex align-items-center gap-2 fw-bold px-3 py-2 rounded-3 shadow-sm">
-                <i class="bi bi-plus-circle"></i>
-                <span>Créer une location</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- 4 Cartes KPI Statistiques -->
-    <div class="row g-3 mb-4">
-        <!-- KPI 1 : Total -->
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="bo-kpi-card">
-                <div class="bo-kpi-top">
-                    <div class="bo-kpi-icon" style="background: rgba(0, 145, 255, 0.12); color: #0091ff;">
-                        <i class="bi bi-journal-check"></i>
-                    </div>
-                    <span class="badge bg-light text-muted border px-2 py-1 rounded-pill" style="font-size:0.72rem;">Global</span>
-                </div>
-                <div class="bo-kpi-val"><?= $totalCount ?></div>
-                <div class="bo-kpi-label">Locations totales</div>
-                <div class="bo-kpi-hint">Toutes réservations confondues</div>
-            </div>
-        </div>
-
-        <!-- KPI 2 : En attente -->
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="bo-kpi-card">
-                <div class="bo-kpi-top">
-                    <div class="bo-kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #f59e0b;">
-                        <i class="bi bi-hourglass-split"></i>
-                    </div>
-                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1 rounded-pill" style="font-size:0.72rem;">Prioritaire</span>
-                </div>
-                <div class="bo-kpi-val text-warning"><?= $pendingCount ?></div>
-                <div class="bo-kpi-label">En attente de validation</div>
-                <div class="bo-kpi-hint">Demandes à traiter rapidement</div>
-            </div>
-        </div>
-
-        <!-- KPI 3 : En cours -->
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="bo-kpi-card">
-                <div class="bo-kpi-top">
-                    <div class="bo-kpi-icon" style="background: rgba(14, 165, 233, 0.12); color: #0ea5e9;">
-                        <i class="bi bi-arrow-repeat"></i>
-                    </div>
-                    <span class="badge bg-info-subtle text-info border border-info-subtle px-2 py-1 rounded-pill" style="font-size:0.72rem;">En rotation</span>
-                </div>
-                <div class="bo-kpi-val text-info"><?= $activeCount ?></div>
-                <div class="bo-kpi-label">En cours</div>
-                <div class="bo-kpi-hint">Matériel actuellement sorti</div>
-            </div>
-        </div>
-
-        <!-- KPI 4 : Chiffre d'affaires -->
-        <div class="col-12 col-sm-6 col-lg-3">
-            <div class="bo-kpi-card">
-                <div class="bo-kpi-top">
-                    <div class="bo-kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #10b981;">
-                        <i class="bi bi-wallet2"></i>
-                    </div>
-                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded-pill" style="font-size:0.72rem;">Total</span>
-                </div>
-                <div class="bo-kpi-val text-success" style="font-size: 1.6rem;"><?= number_format($totalRevenue, 2, ',', ' ') ?> <small style="font-size: 0.85rem;">DT</small></div>
-                <div class="bo-kpi-label">Chiffre d'affaires</div>
-                <div class="bo-kpi-hint">Revenus générés & frais</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Carte principale du Tableau & Filtres -->
-    <div class="table-rental-card">
-        <!-- Barre de filtres & recherche interactive -->
-        <div class="p-3 p-md-4 border-bottom bg-white d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
-            <!-- Boutons de filtrage rapide par statut -->
-            <div class="d-flex align-items-center gap-2 flex-wrap" id="statusFilterGroup">
-                <button type="button" class="btn btn-sm filter-status-btn active btn-dark rounded-pill px-3 py-2 fw-semibold" data-status="all">
-                    Toutes <span class="badge bg-white text-dark ms-1 rounded-pill"><?= $totalCount ?></span>
+            
+            <div class="d-flex align-items-center gap-2 flex-wrap pt-md-2">
+                <button type="button" id="btnExportCsv" class="btn btn-outline-light d-flex align-items-center gap-2 fw-semibold px-3 py-2 rounded-pill shadow-sm" style="border-color: rgba(255,255,255,0.2); font-size: 0.88rem;">
+                    <i class="bi bi-download"></i>
+                    <span>Exporter CSV</span>
                 </button>
-                <button type="button" class="btn btn-sm filter-status-btn btn-outline-secondary rounded-pill px-3 py-2 fw-semibold" data-status="En attente">
-                    En attente <span class="badge bg-warning text-dark ms-1 rounded-pill"><?= $pendingCount ?></span>
-                </button>
-                <button type="button" class="btn btn-sm filter-status-btn btn-outline-secondary rounded-pill px-3 py-2 fw-semibold" data-status="Validée">
-                    Validées <span class="badge bg-info text-white ms-1 rounded-pill"><?= $activeCount ?></span>
-                </button>
-                <button type="button" class="btn btn-sm filter-status-btn btn-outline-secondary rounded-pill px-3 py-2 fw-semibold" data-status="Terminée">
-                    Terminées <span class="badge bg-success text-white ms-1 rounded-pill"><?= $completedCount ?></span>
-                </button>
-            </div>
-
-            <!-- Champ de recherche en direct -->
-            <div class="rentals-search-wrapper" style="min-width: 280px; max-width: 380px;">
-                <i class="bi bi-search rentals-search-icon"></i>
-                <input type="text" id="rentalSearchInput" class="form-control rentals-search-input" placeholder="Rechercher client, équipement, ID..." autocomplete="off">
+                <a href="<?= BASE_URL ?>/index.php?action=location_comptoir" class="btn btn-primary d-flex align-items-center gap-2 fw-bold px-4 py-2 rounded-pill shadow-sm">
+                    <i class="bi bi-plus-lg"></i>
+                    <span>Créer une location</span>
+                </a>
             </div>
         </div>
 
-        <!-- Tableau enrichi des locations -->
-        <div class="table-responsive">
-            <table class="table rentals-table align-middle" id="locationsTable">
-                <thead>
-                    <tr>
-                        <th style="width: 80px;">ID</th>
-                        <th>Client (Locataire)</th>
-                        <th>Équipement & Quantité</th>
-                        <th>Période & Durée</th>
-                        <th>Montant & Frais</th>
-                        <th>Statut</th>
-                        <th class="text-end" style="min-width: 220px;">Actions & Documents</th>
-                    </tr>
-                </thead>
-                <tbody id="rentalTableBody">
-                    <?php if (empty($locations)): ?>
-                        <tr>
-                            <td colspan="7" class="text-center py-5 text-muted">
-                                <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
-                                Aucune location enregistrée pour le moment.
-                            </td>
-                        </tr>
-                    <?php else: ?>
-                        <?php foreach ($locations as $loc): 
-                            $nomClient = trim($loc['client_nom'] . ' ' . $loc['client_prenom']);
-                            $initials = strtoupper(mb_substr($loc['client_prenom'] ?? '', 0, 1) . mb_substr($loc['client_nom'] ?? '', 0, 1)) ?: 'CL';
-                            $status = $loc['statut'];
-                            $totalAmount = (float)$loc['montant_total'] + (float)$loc['frais_supplementaires'];
-                        ?>
-                            <tr class="rental-row" 
-                                data-status="<?= htmlspecialchars($status) ?>"
-                                data-search="<?= htmlspecialchars(strtolower($loc['id_location'] . ' ' . $nomClient . ' ' . $loc['client_email'] . ' ' . ($loc['client_telephone'] ?? '') . ' ' . $loc['nom_equipement'] . ' ' . $loc['nom_categorie'])) ?>"
-                                data-amount="<?= $totalAmount ?>">
-                                
-                                <!-- ID -->
-                                <td>
-                                    <span class="fw-bold text-secondary">#<?= $loc['id_location'] ?></span>
-                                </td>
+        <!-- 2. Bandeau KPI segmenté en 4 colonnes -->
+        <div class="cat-kpi-box" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="cat-kpi-col">
+                <div class="cat-kpi-bignum"><?= sprintf('%02d', $totalCount) ?></div>
+                <div class="cat-kpi-tag">LOCATIONS TOTALES</div>
+            </div>
 
-                                <!-- Client enrichi -->
-                                <td>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="client-avatar">
-                                            <?= htmlspecialchars($initials) ?>
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold text-dark"><?= htmlspecialchars($nomClient) ?></div>
-                                            <div class="text-muted small d-flex align-items-center gap-1">
-                                                <i class="bi bi-envelope" style="font-size: 0.75rem;"></i>
-                                                <span><?= htmlspecialchars($loc['client_email']) ?></span>
-                                            </div>
-                                            <?php if (!empty($loc['client_telephone'])): ?>
-                                                <div class="text-muted small d-flex align-items-center gap-1">
-                                                    <i class="bi bi-telephone" style="font-size: 0.75rem;"></i>
-                                                    <span><?= htmlspecialchars($loc['client_telephone']) ?></span>
-                                                </div>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <!-- Équipement & Catégorie -->
-                                <td>
-                                    <div class="fw-bold text-dark mb-1"><?= htmlspecialchars($loc['nom_equipement']) ?></div>
-                                    <div class="d-flex align-items-center gap-1 flex-wrap">
-                                        <span class="badge bg-light text-dark border fw-normal" style="font-size:0.75rem;">
-                                            <i class="bi bi-tag me-1 text-primary"></i><?= htmlspecialchars($loc['nom_categorie']) ?>
-                                        </span>
-                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle fw-semibold" style="font-size:0.75rem;">
-                                            Qté : <?= $loc['quantite'] ?>
-                                        </span>
-                                    </div>
-                                </td>
-
-                                <!-- Période & Durée -->
-                                <td>
-                                    <div class="d-flex align-items-center gap-1 text-dark small fw-semibold mb-1">
-                                        <i class="bi bi-calendar-event text-primary"></i>
-                                        <span><?= date('d/m/Y', strtotime($loc['date_debut'])) ?></span>
-                                        <span class="text-muted">➔</span>
-                                        <i class="bi bi-calendar-check text-success"></i>
-                                        <span><?= date('d/m/Y', strtotime($loc['date_fin'])) ?></span>
-                                    </div>
-                                    <span class="badge bg-secondary-subtle text-secondary border fw-normal" style="font-size: 0.72rem;">
-                                        <i class="bi bi-clock me-1"></i><?= $loc['duree_jours'] ?> jour(s)
-                                    </span>
-                                </td>
-
-                                <!-- Montant & Frais -->
-                                <td>
-                                    <div class="fw-bold text-primary fs-6">
-                                        <?= number_format($totalAmount, 2, ',', ' ') ?> DT
-                                    </div>
-                                    <?php if ($loc['frais_supplementaires'] > 0): ?>
-                                        <div class="text-danger small fw-semibold mt-1">
-                                            <i class="bi bi-exclamation-triangle-fill me-1"></i>+<?= number_format($loc['frais_supplementaires'], 2, ',', ' ') ?> DT
-                                        </div>
-                                        <?php if (!empty($loc['motif_frais'])): ?>
-                                            <div class="text-muted" style="font-size: 0.72rem; max-width: 140px;" title="<?= htmlspecialchars($loc['motif_frais']) ?>">
-                                                <?= htmlspecialchars($loc['motif_frais']) ?>
-                                            </div>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                </td>
-
-                                <!-- Statut avec pastille (.status-pill) -->
-                                <td>
-                                    <?php if ($status === 'En attente'): ?>
-                                        <span class="status-pill status-pill--en-attente">
-                                            <span class="dot"></span>
-                                            <span>En attente</span>
-                                        </span>
-                                    <?php elseif (in_array($status, ['Validée', 'En cours'])): ?>
-                                        <span class="status-pill status-pill--validee">
-                                            <span class="dot"></span>
-                                            <span><?= htmlspecialchars($status) ?></span>
-                                        </span>
-                                    <?php elseif ($status === 'Terminée'): ?>
-                                        <span class="status-pill status-pill--terminee">
-                                            <span class="dot"></span>
-                                            <span>Terminée</span>
-                                        </span>
-                                    <?php elseif ($status === 'Annulée'): ?>
-                                        <span class="status-pill status-pill--annulee">
-                                            <span class="dot"></span>
-                                            <span>Annulée</span>
-                                        </span>
-                                    <?php else: ?>
-                                        <span class="badge bg-secondary rounded-pill"><?= htmlspecialchars($status) ?></span>
-                                    <?php endif; ?>
-                                </td>
-
-                                <!-- Actions & Documents PDF -->
-                                <td class="text-end">
-                                    <div class="d-flex flex-column align-items-end gap-2">
-                                        <!-- Actions contextuelles selon statut -->
-                                        <?php if ($status === 'En attente'): ?>
-                                            <div class="d-flex align-items-center gap-1">
-                                                <a href="<?= BASE_URL ?>/index.php?action=location_status&id=<?= $loc['id_location'] ?>&statut=Validée" 
-                                                   class="btn btn-sm btn-success fw-bold d-inline-flex align-items-center gap-1 shadow-sm px-2 py-1" 
-                                                   title="Valider la location">
-                                                    <i class="bi bi-check-circle"></i>
-                                                    <span>Valider</span>
-                                                </a>
-                                                <a href="<?= BASE_URL ?>/index.php?action=location_status&id=<?= $loc['id_location'] ?>&statut=Annulée" 
-                                                   class="btn btn-sm btn-outline-danger d-inline-flex align-items-center px-2 py-1" 
-                                                   title="Refuser ou annuler"
-                                                   onclick="return confirm('Confirmer l\'annulation de cette réservation ?');">
-                                                    <i class="bi bi-x-lg"></i>
-                                                </a>
-                                            </div>
-                                        <?php elseif (in_array($status, ['Validée', 'En cours'])): ?>
-                                            <a href="<?= BASE_URL ?>/index.php?action=location_retour&id=<?= $loc['id_location'] ?>" 
-                                               class="btn btn-sm btn-warning text-dark fw-bold d-inline-flex align-items-center gap-1 shadow-sm px-3 py-1" 
-                                               title="Diagnostiquer le retour matériel">
-                                                <i class="bi bi-box-arrow-in-left"></i>
-                                                <span>Diagnostic retour</span>
-                                            </a>
-                                        <?php endif; ?>
-
-                                        <!-- Trio PDF imposé : Contrat, Facture, Reçu -->
-                                        <div class="btn-group btn-group-sm pdf-btn-group">
-                                            <a href="<?= BASE_URL ?>/index.php?action=pdf_contrat&id=<?= $loc['id_location'] ?>" 
-                                               target="_blank" 
-                                               class="btn btn-outline-primary d-inline-flex align-items-center gap-1" 
-                                               title="Imprimer Contrat PDF">
-                                                <i class="bi bi-file-earmark-text"></i> Contrat
-                                            </a>
-                                            <a href="<?= BASE_URL ?>/index.php?action=pdf_facture&id=<?= $loc['id_location'] ?>" 
-                                               target="_blank" 
-                                               class="btn btn-outline-success d-inline-flex align-items-center gap-1" 
-                                               title="Imprimer Facture PDF">
-                                                <i class="bi bi-receipt"></i> Facture
-                                            </a>
-                                            <a href="<?= BASE_URL ?>/index.php?action=pdf_recu&id=<?= $loc['id_location'] ?>" 
-                                               target="_blank" 
-                                               class="btn btn-outline-info d-inline-flex align-items-center gap-1" 
-                                               title="Imprimer Reçu PDF">
-                                                <i class="bi bi-check2-square"></i> Reçu
-                                            </a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
+            <div class="cat-kpi-col">
+                <div class="cat-kpi-bignum <?= $pendingCount > 0 ? 'text-warning' : 'text-white' ?> d-flex align-items-center gap-2">
+                    <span><?= sprintf('%02d', $pendingCount) ?></span>
+                    <?php if ($pendingCount > 0): ?>
+                        <span class="badge bg-warning text-dark rounded-pill px-2 py-0" style="font-size: 0.65rem;">Prioritaire</span>
                     <?php endif; ?>
-                </tbody>
-            </table>
+                </div>
+                <div class="cat-kpi-tag">EN ATTENTE DE VALIDATION</div>
+            </div>
+
+            <div class="cat-kpi-col">
+                <div class="cat-kpi-bignum text-info"><?= sprintf('%02d', $activeCount) ?></div>
+                <div class="cat-kpi-tag">EN COURS</div>
+            </div>
+
+            <div class="cat-kpi-col">
+                <div class="cat-kpi-bignum text-success" style="font-size: 2rem;">
+                    <?= number_format($totalRevenue, 2, ',', ' ') ?> <small style="font-size: 0.9rem;">DT</small>
+                </div>
+                <div class="cat-kpi-tag">CHIFFRE D'AFFAIRES</div>
+            </div>
         </div>
 
-        <!-- Message État vide lors de recherche infructueuse -->
-        <div id="tableEmptyState" class="text-center py-5 text-muted d-none">
-            <i class="bi bi-search fs-1 d-block mb-2 text-secondary opacity-50"></i>
-            <h6 class="fw-bold text-dark">Aucun résultat trouvé</h6>
-            <p class="small text-muted mb-0">Essayez de modifier votre recherche ou de sélectionner un autre filtre de statut.</p>
+        <!-- 3. Barre de commande & filtres par statut + recherche + commutateur de vue -->
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+            <!-- Filtres par statut (chips) -->
+            <div class="d-flex align-items-center gap-2 flex-wrap" id="statusFilterGroup">
+                <button type="button" class="filter-status-btn stock-state-chip-dark active" data-status="all">
+                    Toutes (<?= $totalCount ?>)
+                </button>
+                <button type="button" class="filter-status-btn stock-state-chip-dark" data-status="En attente">
+                    En attente (<?= $pendingCount ?>)
+                </button>
+                <button type="button" class="filter-status-btn stock-state-chip-dark" data-status="Validée">
+                    En cours (<?= $activeCount ?>)
+                </button>
+                <button type="button" class="filter-status-btn stock-state-chip-dark" data-status="Terminée">
+                    Terminées (<?= $completedCount ?>)
+                </button>
+            </div>
+
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+                <!-- Recherche en direct -->
+                <div class="position-relative" style="min-width: 260px; max-width: 320px;">
+                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                    <input type="text" id="rentalSearchInput" class="cat-search-input-dark" placeholder="Rechercher client, matériel, ID..." autocomplete="off">
+                </div>
+
+                <!-- Commutateur Grille de Cartes / Rangées Modernes -->
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="cat-view-btn active" id="btnViewGrid" title="Vue en grille de cartes">
+                        <i class="bi bi-grid-fill"></i>
+                    </button>
+                    <button type="button" class="cat-view-btn" id="btnViewRows" title="Vue en rangées aérées">
+                        <i class="bi bi-view-stacked"></i>
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <!-- Pied du tableau : Décompte & Total dynamique -->
-        <div class="p-3 p-md-4 bg-light border-top d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2">
-            <div class="text-muted small">
-                Affichage de <span id="displayedCount" class="fw-bold text-dark"><?= $totalCount ?></span> location(s)
-            </div>
-            <div class="small fw-semibold text-dark">
-                Total des montants filtrés : <span id="filteredAmountDisplay" class="fw-bold text-primary fs-6"><?= number_format($totalRevenue, 2, ',', ' ') ?> DT</span>
-            </div>
+        <!-- 4. VUE 1 : Grille de Cartes Visuelles (Par défaut) -->
+        <div class="rentals-cards-grid" id="rentalsGridView">
+            <?php foreach ($locations as $loc): 
+                $nomClient = trim($loc['client_nom'] . ' ' . $loc['client_prenom']);
+                $initials = strtoupper(mb_substr($loc['client_prenom'] ?? '', 0, 1) . mb_substr($loc['client_nom'] ?? '', 0, 1)) ?: 'CL';
+                $status = $loc['statut'];
+                $totalAmount = (float)$loc['montant_total'] + (float)$loc['frais_supplementaires'];
+                $locCode = sprintf('%02d', $loc['id_location']);
+                
+                $etatPill = match($status) {
+                    'En attente' => 'status-pill--en-attente',
+                    'Validée', 'En cours' => 'status-pill--validee',
+                    'Terminée' => 'status-pill--terminee',
+                    default => 'status-pill--annulee'
+                };
+            ?>
+                <div class="rental-card-wrapper rental-item" 
+                     data-id="<?= $loc['id_location'] ?>"
+                     data-status="<?= htmlspecialchars($status) ?>"
+                     data-search="<?= htmlspecialchars(strtolower($loc['id_location'] . ' ' . $nomClient . ' ' . $loc['client_email'] . ' ' . ($loc['client_telephone'] ?? '') . ' ' . $loc['nom_equipement'] . ' ' . $loc['nom_categorie'] . ' ' . $locCode)) ?>"
+                     data-amount="<?= $totalAmount ?>"
+                     data-client="<?= htmlspecialchars($nomClient) ?>"
+                     data-equipement="<?= htmlspecialchars($loc['nom_equipement']) ?>">
+                    
+                    <div class="cat-luminous-card h-100 d-flex flex-column">
+                        <!-- En-tête de carte -->
+                        <div class="cat-card-header-row mb-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="cat-code-badge">#<?= $locCode ?></span>
+                                <span class="badge rounded-pill" style="background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; font-size: 0.72rem;">
+                                    <?= htmlspecialchars($loc['nom_categorie']) ?>
+                                </span>
+                            </div>
+                            <span class="status-pill <?= $etatPill ?>">
+                                <span class="dot"></span>
+                                <span><?= htmlspecialchars($status) ?></span>
+                            </span>
+                        </div>
+
+                        <!-- Équipement & Quantité -->
+                        <h4 class="cat-title-text mb-1 text-truncate" title="<?= htmlspecialchars($loc['nom_equipement']) ?>">
+                            <?= htmlspecialchars($loc['nom_equipement']) ?>
+                        </h4>
+                        <div class="text-muted small mb-3">
+                            <i class="bi bi-box-seam me-1 text-primary"></i> Quantité réservée : <strong><?= $loc['quantite'] ?> unité(s)</strong>
+                        </div>
+
+                        <!-- Section Client -->
+                        <div class="d-flex align-items-center gap-3 p-3 rounded-3 mb-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                            <div class="cat-tile-icon" style="width: 38px; height: 38px; font-size: 0.85rem; font-weight: 700;">
+                                <?= htmlspecialchars($initials) ?>
+                            </div>
+                            <div class="flex-grow-1 overflow-hidden">
+                                <strong class="text-dark d-block text-truncate" style="font-size: 0.9rem;"><?= htmlspecialchars($nomClient) ?></strong>
+                                <small class="text-muted d-block text-truncate"><?= htmlspecialchars($loc['client_email']) ?></small>
+                            </div>
+                        </div>
+
+                        <!-- Période & Montant -->
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div>
+                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Période (<?= $loc['duree_jours'] ?> j)</span>
+                                <span class="text-dark small fw-semibold">
+                                    <?= date('d/m', strtotime($loc['date_debut'])) ?> ➔ <?= date('d/m/Y', strtotime($loc['date_fin'])) ?>
+                                </span>
+                            </div>
+                            <div class="text-end">
+                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Montant total</span>
+                                <div class="cat-title-text text-primary mb-0" style="font-size: 1.25rem;">
+                                    <?= number_format($totalAmount, 2, ',', ' ') ?> <small style="font-size: 0.72rem; color: #8fa0b5;">DT</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Boutons d'actions et PDFs -->
+                        <div class="mt-auto pt-3 border-top d-flex flex-column gap-2" style="border-color: #f1f5f9 !important;">
+                            <!-- Actions directes de gestion -->
+                            <?php if ($status === 'En attente'): ?>
+                                <div class="d-flex gap-2">
+                                    <a href="<?= BASE_URL ?>/index.php?action=location_status&id=<?= $loc['id_location'] ?>&statut=Validée" 
+                                       class="btn btn-sm btn-success fw-bold rounded-pill w-100 py-2 shadow-sm d-flex align-items-center justify-content-center gap-1">
+                                        <i class="bi bi-check-circle-fill"></i> Valider
+                                    </a>
+                                    <a href="<?= BASE_URL ?>/index.php?action=location_status&id=<?= $loc['id_location'] ?>&statut=Annulée" 
+                                       class="btn btn-sm btn-outline-danger rounded-pill px-3 py-2" 
+                                       onclick="return confirm('Confirmer l\'annulation ?');"
+                                       title="Annuler">
+                                        <i class="bi bi-x-lg"></i>
+                                    </a>
+                                </div>
+                            <?php elseif (in_array($status, ['Validée', 'En cours'])): ?>
+                                <a href="<?= BASE_URL ?>/index.php?action=location_retour&id=<?= $loc['id_location'] ?>" 
+                                   class="btn btn-sm btn-warning text-dark fw-bold rounded-pill w-100 py-2 shadow-sm d-flex align-items-center justify-content-center gap-1">
+                                    <i class="bi bi-box-arrow-in-left"></i> Diagnostic retour
+                                </a>
+                            <?php endif; ?>
+
+                            <!-- Trio PDF -->
+                            <div class="d-flex align-items-center justify-content-between gap-1">
+                                <a href="<?= BASE_URL ?>/index.php?action=pdf_contrat&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1 flex-grow-1 text-center" style="font-size: 0.72rem;">
+                                    <i class="bi bi-file-earmark-text"></i> Contrat
+                                </a>
+                                <a href="<?= BASE_URL ?>/index.php?action=pdf_facture&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1 flex-grow-1 text-center" style="font-size: 0.72rem;">
+                                    <i class="bi bi-receipt"></i> Facture
+                                </a>
+                                <a href="<?= BASE_URL ?>/index.php?action=pdf_recu&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1 flex-grow-1 text-center" style="font-size: 0.72rem;">
+                                    <i class="bi bi-check2-square"></i> Reçu
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- 5. VUE 2 : Rangées de Fiches Aérées (Commutable) -->
+        <div class="d-none" id="rentalsRowsView">
+            <?php foreach ($locations as $loc): 
+                $nomClient = trim($loc['client_nom'] . ' ' . $loc['client_prenom']);
+                $initials = strtoupper(mb_substr($loc['client_prenom'] ?? '', 0, 1) . mb_substr($loc['client_nom'] ?? '', 0, 1)) ?: 'CL';
+                $status = $loc['statut'];
+                $totalAmount = (float)$loc['montant_total'] + (float)$loc['frais_supplementaires'];
+                $locCode = sprintf('%02d', $loc['id_location']);
+                
+                $etatPill = match($status) {
+                    'En attente' => 'status-pill--en-attente',
+                    'Validée', 'En cours' => 'status-pill--validee',
+                    'Terminée' => 'status-pill--terminee',
+                    default => 'status-pill--annulee'
+                };
+            ?>
+                <div class="cat-row-card rental-row-item"
+                     data-status="<?= htmlspecialchars($status) ?>"
+                     data-search="<?= htmlspecialchars(strtolower($loc['id_location'] . ' ' . $nomClient . ' ' . $loc['client_email'] . ' ' . ($loc['client_telephone'] ?? '') . ' ' . $loc['nom_equipement'] . ' ' . $loc['nom_categorie'] . ' ' . $locCode)) ?>"
+                     data-amount="<?= $totalAmount ?>">
+                    <div class="row align-items-center g-3">
+                        <!-- ID + Client -->
+                        <div class="col-12 col-xl-3 col-lg-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="cat-code-badge">#<?= $locCode ?></span>
+                                <div class="cat-tile-icon" style="width: 36px; height: 36px; font-size: 0.82rem; font-weight: 700;">
+                                    <?= htmlspecialchars($initials) ?>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <strong class="text-dark d-block text-truncate" style="font-size: 0.92rem;"><?= htmlspecialchars($nomClient) ?></strong>
+                                    <small class="text-muted d-block text-truncate"><?= htmlspecialchars($loc['client_email']) ?></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Matériel -->
+                        <div class="col-12 col-xl-3 col-lg-3">
+                            <strong class="text-dark d-block text-truncate"><?= htmlspecialchars($loc['nom_equipement']) ?></strong>
+                            <small class="text-muted">
+                                <?= htmlspecialchars($loc['nom_categorie']) ?> &middot; Qté : <span class="text-primary fw-bold"><?= $loc['quantite'] ?></span>
+                            </small>
+                        </div>
+
+                        <!-- Dates & Montant -->
+                        <div class="col-6 col-xl-2 col-lg-2">
+                            <div class="text-dark small fw-semibold">
+                                <?= date('d/m', strtotime($loc['date_debut'])) ?> ➔ <?= date('d/m/Y', strtotime($loc['date_fin'])) ?>
+                            </div>
+                            <div class="cat-title-text text-primary mb-0" style="font-size: 1.1rem;">
+                                <?= number_format($totalAmount, 2, ',', ' ') ?> DT
+                            </div>
+                        </div>
+
+                        <!-- Statut -->
+                        <div class="col-6 col-xl-1 col-lg-1 text-center">
+                            <span class="status-pill <?= $etatPill ?>">
+                                <span class="dot"></span>
+                                <span><?= htmlspecialchars($status) ?></span>
+                            </span>
+                        </div>
+
+                        <!-- Actions & PDFs -->
+                        <div class="col-12 col-xl-3 col-lg-12 d-flex align-items-center justify-content-xl-end gap-2 flex-wrap">
+                            <?php if ($status === 'En attente'): ?>
+                                <a href="<?= BASE_URL ?>/index.php?action=location_status&id=<?= $loc['id_location'] ?>&statut=Validée" class="btn btn-sm btn-success rounded-pill px-3 py-1 fw-semibold">
+                                    Valider
+                                </a>
+                            <?php elseif (in_array($status, ['Validée', 'En cours'])): ?>
+                                <a href="<?= BASE_URL ?>/index.php?action=location_retour&id=<?= $loc['id_location'] ?>" class="btn btn-sm btn-warning text-dark fw-bold rounded-pill px-3 py-1">
+                                    Retour
+                                </a>
+                            <?php endif; ?>
+
+                            <div class="btn-group btn-group-sm">
+                                <a href="<?= BASE_URL ?>/index.php?action=pdf_contrat&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-outline-secondary rounded-pill px-2 py-1" style="font-size: 0.72rem;">
+                                    Contrat
+                                </a>
+                                <a href="<?= BASE_URL ?>/index.php?action=pdf_facture&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-outline-secondary rounded-pill px-2 py-1" style="font-size: 0.72rem;">
+                                    Facture
+                                </a>
+                                <a href="<?= BASE_URL ?>/index.php?action=pdf_recu&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-outline-secondary rounded-pill px-2 py-1" style="font-size: 0.72rem;">
+                                    Reçu
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- État vide si la recherche ne donne rien -->
+        <div id="rentalsEmptyState" class="text-center py-5 cat-luminous-card d-none">
+            <i class="bi bi-search fs-1 d-block mb-3 text-muted"></i>
+            <h5 class="fw-bold text-white">Aucune location trouvée</h5>
+            <p class="small text-muted mb-0">Essayez de modifier votre recherche ou de changer de filtre de statut.</p>
         </div>
     </div>
 </div>
 
-<!-- Script interactif de filtrage, recherche, décompte et export CSV -->
+<!-- Script interactif de filtrage, recherche, commutation de vue et export CSV -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const filterButtons = document.querySelectorAll('.filter-status-btn');
     const searchInput = document.getElementById('rentalSearchInput');
-    const rows = document.querySelectorAll('.rental-row');
-    const emptyState = document.getElementById('tableEmptyState');
-    const displayedCountEl = document.getElementById('displayedCount');
-    const filteredAmountEl = document.getElementById('filteredAmountDisplay');
+    const gridItems = document.querySelectorAll('.rental-item');
+    const rowItems = document.querySelectorAll('.rental-row-item');
+    const emptyState = document.getElementById('rentalsEmptyState');
     const exportBtn = document.getElementById('btnExportCsv');
+
+    const btnGrid = document.getElementById('btnViewGrid');
+    const btnRows = document.getElementById('btnViewRows');
+    const gridView = document.getElementById('rentalsGridView');
+    const rowsView = document.getElementById('rentalsRowsView');
 
     let currentStatusFilter = 'all';
     let currentSearchTerm = '';
 
-    function formatDT(amount) {
-        return new Intl.NumberFormat('fr-FR', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(amount) + ' DT';
+    // Commutateur Grille / Rangées
+    if (btnGrid && btnRows) {
+        btnGrid.addEventListener('click', () => {
+            btnGrid.classList.add('active');
+            btnRows.classList.remove('active');
+            gridView.classList.remove('d-none');
+            rowsView.classList.add('d-none');
+        });
+
+        btnRows.addEventListener('click', () => {
+            btnRows.classList.add('active');
+            btnGrid.classList.remove('active');
+            rowsView.classList.remove('d-none');
+            gridView.classList.add('d-none');
+        });
     }
 
     function applyFilters() {
         let visibleCount = 0;
-        let visibleAmountSum = 0;
 
-        rows.forEach(row => {
+        gridItems.forEach(item => {
+            const rowStatus = item.getAttribute('data-status');
+            const rowSearch = item.getAttribute('data-search') || '';
+
+            let matchesStatus = false;
+            if (currentStatusFilter === 'all') {
+                matchesStatus = true;
+            } else if (currentStatusFilter === 'Validée') {
+                matchesStatus = (rowStatus === 'Validée' || rowStatus === 'En cours');
+            } else {
+                matchesStatus = (rowStatus === currentStatusFilter);
+            }
+
+            const matchesSearch = !currentSearchTerm || rowSearch.includes(currentSearchTerm);
+
+            if (matchesStatus && matchesSearch) {
+                item.style.display = '';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        rowItems.forEach(row => {
             const rowStatus = row.getAttribute('data-status');
             const rowSearch = row.getAttribute('data-search') || '';
-            const rowAmount = parseFloat(row.getAttribute('data-amount')) || 0;
 
             let matchesStatus = false;
             if (currentStatusFilter === 'all') {
@@ -376,41 +396,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (matchesStatus && matchesSearch) {
                 row.style.display = '';
-                visibleCount++;
-                visibleAmountSum += rowAmount;
             } else {
                 row.style.display = 'none';
             }
         });
 
-        // Afficher ou masquer l'état vide
-        if (visibleCount === 0 && rows.length > 0) {
+        if (visibleCount === 0 && gridItems.length > 0) {
             emptyState.classList.remove('d-none');
         } else {
             emptyState.classList.add('d-none');
         }
-
-        // Mettre à jour le pied de tableau
-        if (displayedCountEl) displayedCountEl.textContent = visibleCount;
-        if (filteredAmountEl) filteredAmountEl.textContent = formatDT(visibleAmountSum);
     }
 
-    // Gestion du clic sur les boutons de filtre
     filterButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            filterButtons.forEach(b => {
-                b.classList.remove('active', 'btn-dark');
-                b.classList.add('btn-outline-secondary');
-            });
-            btn.classList.add('active', 'btn-dark');
-            btn.classList.remove('btn-outline-secondary');
-
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
             currentStatusFilter = btn.getAttribute('data-status');
             applyFilters();
         });
     });
 
-    // Recherche en temps réel
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             currentSearchTerm = e.target.value.trim().toLowerCase();
@@ -418,19 +424,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Export CSV des lignes actuellement visibles
     if (exportBtn) {
         exportBtn.addEventListener('click', () => {
             let csv = [];
             csv.push(['ID', 'Client', 'Équipement', 'Statut', 'Montant (DT)'].join(';'));
 
-            rows.forEach(row => {
-                if (row.style.display !== 'none') {
-                    const id = row.querySelector('td:nth-child(1)')?.innerText.trim();
-                    const client = row.querySelector('td:nth-child(2) .fw-bold')?.innerText.trim();
-                    const equipement = row.querySelector('td:nth-child(3) .fw-bold')?.innerText.trim();
-                    const status = row.getAttribute('data-status') || '';
-                    const amount = row.getAttribute('data-amount') || '0';
+            gridItems.forEach(item => {
+                if (item.style.display !== 'none') {
+                    const id = item.getAttribute('data-id') || '';
+                    const client = item.getAttribute('data-client') || '';
+                    const equipement = item.getAttribute('data-equipement') || '';
+                    const status = item.getAttribute('data-status') || '';
+                    const amount = item.getAttribute('data-amount') || '0';
 
                     csv.push([`"${id}"`, `"${client}"`, `"${equipement}"`, `"${status}"`, `"${amount}"`].join(';'));
                 }
