@@ -2116,6 +2116,22 @@ button:focus-visible {
     border-color: rgba(239, 68, 68, 0.5);
 }
 
+/* Bloc Prix & Disponibilité */
+.cat-price-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+}
+.cat-price-value {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0091ff !important;
+}
+
 /* ============================================================
    BOUTON BASCULE THÈME (CLAIRE / SOMBRE) & RÈGLES MODE SOMBRE
    ============================================================ */
@@ -2231,6 +2247,14 @@ button:focus-visible {
 }
 [data-theme="dark"] .cat-card-bottom-actions {
     border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .cat-price-box {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="dark"] .cat-price-value {
+    color: #38bdf8 !important;
 }
 
 [data-theme="dark"] .cat-row-card {

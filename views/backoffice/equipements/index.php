@@ -262,7 +262,7 @@ $blueTones = [
 
                                 <!-- Pied de carte : Tarif & Actions -->
                                 <div class="cat-card-bottom-actions">
-                                    <div class="cat-title-text text-primary mb-0" style="font-size: 1.25rem;">
+                                    <div class="cat-price-value mb-0">
                                         <?= number_format($eq['prix_par_jour'], 2, ',', ' ') ?> <small style="font-size: 0.72rem; color: #8fa0b5;">DT/j</small>
                                     </div>
                                     <div class="d-flex align-items-center gap-1">

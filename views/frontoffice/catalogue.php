@@ -153,11 +153,11 @@ require_once __DIR__ . '/../layout/navbar.php';
                             </p>
 
                             <!-- Tarif & Disponibilité -->
-                            <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                            <div class="d-flex align-items-center justify-content-between cat-price-box">
                                 <div>
                                     <span class="text-muted small d-block" style="font-size: 0.72rem;">Tarif journalier</span>
-                                    <div class="cat-title-text text-primary mb-0" style="font-size: 1.25rem;">
-                                        <?= number_format($eq['prix_par_jour'], 2, ',', ' ') ?> <small style="font-size: 0.75rem; color: #8fa0b5;">DT/j</small>
+                                    <div class="cat-price-value mb-0">
+                                        <?= number_format($eq['prix_par_jour'], 2, ',', ' ') ?> <small style="font-size: 0.75rem;">DT/j</small>
                                     </div>
                                 </div>
                                 <div class="text-end">

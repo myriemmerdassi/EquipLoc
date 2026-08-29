@@ -147,7 +147,7 @@ $totalDocuments = $totalReservations * 3;
                             <!-- Montant -->
                             <div class="col-6 col-xl-2 col-lg-2 col-md-3">
                                 <div class="d-flex flex-column">
-                                    <div class="cat-title-text text-primary mb-0" style="font-size: 1.25rem;">
+                                    <div class="cat-price-value mb-0">
                                         <?= number_format($loc['montant_total'] + $loc['frais_supplementaires'], 2, ',', ' ') ?> <small style="font-size: 0.72rem; color: #8fa0b5;">DT</small>
                                     </div>
                                     <span class="text-muted small">Montant total</span>
@@ -164,13 +164,13 @@ $totalDocuments = $totalReservations * 3;
 
                             <!-- Actions (PDFs) -->
                             <div class="col-12 col-xl-3 col-lg-12 d-flex gap-2 flex-wrap justify-content-xl-end justify-content-lg-start">
-                                <a href="<?= BASE_URL ?>/index.php?action=pdf_contrat&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.78rem; border-color: rgba(255,255,255,0.2);">
+                                <a href="<?= BASE_URL ?>/index.php?action=pdf_contrat&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.78rem;">
                                     <i class="bi bi-file-earmark-text me-1"></i> Contrat
                                 </a>
-                                <a href="<?= BASE_URL ?>/index.php?action=pdf_facture&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.78rem; border-color: rgba(255,255,255,0.2);">
+                                <a href="<?= BASE_URL ?>/index.php?action=pdf_facture&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.78rem;">
                                     <i class="bi bi-receipt me-1"></i> Facture
                                 </a>
-                                <a href="<?= BASE_URL ?>/index.php?action=pdf_recu&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.78rem; border-color: rgba(255,255,255,0.2);">
+                                <a href="<?= BASE_URL ?>/index.php?action=pdf_recu&id=<?= $loc['id_location'] ?>" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold" style="font-size: 0.78rem;">
                                     <i class="bi bi-check2-square me-1"></i> Reçu
                                 </a>
                             </div>
